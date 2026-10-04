@@ -1,0 +1,49 @@
+node_modules
+.next
+.env
+.env.local
+dist
+.DS_Store
+__pycache__
+
+# The machine-level ignore file (~/.config/git/ignore) ends in a blanket `**/*`,
+# so any *new* file here is silently dropped from every commit. These
+# re-include the working tree; without them, src/components/ and any component
+# added later never reach git at all.
+!*/
+!src/
+!src/**
+!scripts/
+!scripts/**
+!pitch-deck-collections/
+!pitch-deck-collections/**
+!docs/
+!docs/**
+# root configs have no slash in them, so **/* swallows them too — and unlike
+# src/ or public/, nothing re-included them until now. Without these lines a
+# fresh `git add -A` commits src/ and public/ but silently drops package.json,
+# tsconfig.json and friends, which is a repo that cannot build.
+!.gitignore
+!/package.json
+!/package-lock.json
+!/tsconfig.json
+!/next.config.ts
+!/next-env.d.ts
+!/postcss.config.mjs
+
+# public/ holds the portrait, the tech logos, and the stickers the placements
+# point at. All of it was being swallowed by the machine-level **/* above, so a
+# deploy from this repo shipped a page with no photo, no logos and no stickers.
+# Everything unused was moved to sticker-library/ first, so what is tracked here
+# is exactly what the site references - 56 files, 2.30 MB.
+!public/
+!public/**
+
+# The unused sticker library: kept on this machine, never hosted and never
+# committed. ~69MB, which is why it belongs here in the project file rather
+# than relying on the machine-level ignore that caused the problem above.
+sticker-library/
+
+# drafts written by the sticker editor. Only a working file - the committed
+# placements are in src/lib/placements.ts and readDraft must not shadow them.
+placements.*.draft.json

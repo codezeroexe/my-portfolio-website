@@ -1,0 +1,457 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-ground: var(--ground);
+  --color-bone: var(--bone);
+  --color-ash: var(--ash);
+  --color-ember: var(--ember);
+  --color-acid: var(--acid);
+  --color-rule: var(--rule);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-hand: var(--font-hand);
+  --font-fine: var(--font-fine);
+}
+
+:root {
+  /* black sheet, bone text, one yellow accent.
+
+     Yellow is an accent rather than decoration because the ground is about to
+     start moving through deep crimson — a red panel number or a red slab
+     printed on a red pool is mud, and these are the elements that have to stay
+     findable. Red survives in exactly one place, the ink shadow tight against
+     bone lettering, where it reads as misregistration rather than as UI. */
+  --ground: oklch(0.13 0.012 20);
+  --bone: oklch(0.94 0.008 80);
+  --ash: oklch(0.68 0.012 60);
+  --ember: oklch(0.62 0.22 32);
+  --acid: oklch(0.86 0.19 95);
+  /* the ramp behind the ground, for things that sit on it.
+     Hue angles are the shader's own — liquid-ground.tsx:107-113 walks
+     blood → ember → yellow → green → teal → blue → violet. Lightness is
+     lifted: the source stops sit at L 0.30–0.41, which is mud against
+     the near-black panel, so these are the same hues at a lightness that
+     reads. Verified against --ground: repo accents 5.93–12.31:1, slabs
+     5.09–13.13:1, all clear 4.5 for the sizes they carry.
+
+     Two separate sets on purpose — repo accents and slab fills are chosen
+     independently even where they overlap (amber, cyan), so changing a
+     panel never repaints the about strip by accident. */
+  --flare-red: oklch(0.66 0.19 27); /* #F0574E */
+  --flare-amber: oklch(0.84 0.16 92); /* #F0C630 */
+  --flare-cyan: oklch(0.78 0.12 205); /* #3BCDDC */
+  --flare-violet: oklch(0.66 0.17 313); /* #B66EDB */
+  --slab-red: oklch(0.64 0.2 25); /* #ED4A49 */
+  --slab-amber: oklch(0.86 0.17 92); /* #F9CC21 */
+  --slab-green: oklch(0.74 0.15 150); /* #5AC576 */
+  --slab-cyan: oklch(0.78 0.12 205); /* #3BCDDC */
+  --slab-blue: oklch(0.62 0.16 272); /* #667CE5, L=0.62 not 0.56: 0.56 gives 4.17:1 at 14px */
+  --slab-violet: oklch(0.62 0.18 310); /* #A761D5 */
+  --rule: oklch(0.94 0.008 80 / 0.22);
+  /* the hairline that separates display lettering from whatever it lands on.
+     Panels override it to --acid, because a black keyline on a black panel is
+     a keyline you cannot see. */
+  --keyline: oklch(0.08 0.01 20);
+  /* blur radius on the frosted partition. Defined here rather than as a
+     var-with-fallback inside blur() because the CSS processor in the build
+     silently dropped backdrop-filter when the fallback was inline. */
+  --frost-blur: 34px;
+  /* The pane needs two layers, not one.
+     --frost-tint is the dark ground that anchors contrast: it is what 10px ash
+     labels are actually read against. --frost-veil is white scatter laid over
+     that, which is what makes the glass read as frosted and light rather than as
+     a smoked panel. Swapping the tint for the veil instead of stacking them
+     fails immediately - at 0% veil, i.e. no white at all, the blurred spectrum
+     comes through at nearly full strength and the small text drops to 3.04:1. */
+  --frost-sat: 5;
+  --frost-tint: 62%;
+  /* Kept at 3%, and that number is a hard ceiling rather than a preference.
+     Measured worst local contrast on the 10px ash labels, over the animating
+     ground: 0% 5.42:1, 10% 4.03:1, 18% 3.16:1. A white veil stacks on top of
+     the dark tint rather than replacing it, so darkening the tint cannot buy
+     the contrast back — past roughly 4% the veil alone puts the background over
+     the 0.034 luminance ceiling that bone-on-dark type needs. The whole page is
+     bone on a dark sheet, so a genuinely milky pane would mean inverting the
+     type, which is a different project. The frost read comes from the grain and
+     the sheen instead. */
+  --frost-veil: 0%;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-fine);
+    scrollbar-width: thin;
+    scrollbar-color: var(--ash) transparent;
+    /* the sticker fields reach into the page margins on both sides; clip
+       rather than hide, so this does not become a scroll container and break
+       position: sticky or the shader canvas. On body as well as html: mobile
+       browsers scroll the body box, so html-only clipping still lets a sticker
+       hanging past ~110% drag the page sideways. Clipping stays at page level,
+       never on the fields themselves — field-level clipping would slice
+       overhanging stickers in half instead of letting them bleed. */
+    overflow-x: clip;
+    /* Rubber-banding past the top or bottom pulls the document away from the
+       viewport and the browser paints whatever is behind <body>. With no
+       background on <html>, the body's own wash propagates to the viewport
+       and covers those areas, so there is no white flash. Do NOT give <html>
+       a background here: the body's background paints after negative-z-index
+       descendants, so an opaque html background pins the body wash onto the
+       body box itself — directly on top of the fixed shader canvas, burying
+       the entire background. That is exactly what happened. */
+    overscroll-behavior-y: none;
+  }
+
+  body {
+    background-color: var(--ground);
+    color: var(--bone);
+    overflow-x: clip;
+  }
+
+  /* The no-webgl2 fallback: an uneven wash so the sheet is never a flat
+     rectangle of grey. It sits on <body> now rather than on a div inside main,
+     which is what lets it show through the canvas before the shader's first
+     frame and stand in for it entirely when there is no context. The fibre
+     grain that used to be in that stack is drawn by the shader instead. */
+  .xerox {
+    background-color: var(--ground);
+    background-image:
+      radial-gradient(ellipse 700px 420px at 12% 4%, oklch(0.3 0.02 60 / 0.5), transparent 70%),
+      radial-gradient(ellipse 620px 460px at 88% 22%, oklch(0.26 0.015 70 / 0.42), transparent 70%),
+      radial-gradient(ellipse 820px 500px at 42% 58%, oklch(0.32 0.025 50 / 0.36), transparent 70%),
+      radial-gradient(ellipse 520px 380px at 74% 88%, oklch(0.24 0.012 80 / 0.4), transparent 70%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 200px 200px;
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--bone);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+/* the giant stacked word. Anton, tight, shoved off the baseline. */
+.scream {
+    font-family: var(--font-display);
+    line-height: 0.78;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+
+    /* comic lettering: a hairline keyline so a word survives landing on a
+       sticker or a moving ground, plus a hard offset shadow in ember.
+
+       -webkit-text-stroke is centred on the glyph outline, so it eats half its
+       width into the fill. That is why this is em and not px: HARI renders at
+       17rem where 2px disappears, and `repo ↗` renders at 14px where 2px would
+       fill the counters. It is deliberately not on .fine or .zine for the same
+       reason. */
+    -webkit-text-stroke: 0.012em var(--keyline);
+    text-shadow: 0.018em 0.018em 0 var(--ember);
+  }
+
+/* red slab behind a headline, slightly misregistered like a bad print run */
+.slab {
+    background: var(--slab-bg, var(--acid));
+    padding: 0.1em 0.22em;
+    display: inline-block;
+    transform: rotate(var(--slab-tilt, -1.2deg));
+    box-shadow: 0.35em 0.35em 0 oklch(0 0 0 / 0.55);
+  }
+
+  /* the about strip: the slab treatment sized for a label + value pair,
+     each in its own ramp colour. Bright fill, near-black text, so the dt
+     label is ground at reduced opacity rather than ash — ash on a bright
+     slab does not survive. */
+.slab-box {
+    display: block;
+    padding: 0.55rem 0.7rem 0.5rem;
+    color: var(--ground);
+  }
+.slab-box dt {
+    color: color-mix(in oklab, var(--ground) 72%, transparent);
+  }
+
+/* body copy */
+.zine {
+    font-family: var(--font-body);
+    line-height: 1.62;
+  }
+
+  /* A heading that shows nothing but keeps its exact footprint.
+
+     These are the slots the ransom-note cutouts get dropped into: the hero word
+     and the last word of each section heading. The text stays in the DOM rather
+     than being deleted, for two reasons — the box has to stay the size the real
+     word was or the page reflows under the stickers, and a screen reader and a
+     crawler still get the real string.
+
+     !important is load-bearing, not laziness. Three of these slots carry a
+     colour that beats plain .blank: the repo numbers inherit
+     `color: var(--acid)` from .panel-num, which is defined later in this same
+     layer, and MATTER/HI carried text-acid / text-bone, which are utilities and
+     so live in a later layer again. Without !important the rule loses to all
+     three and the word stays visible — which is exactly what happened. The
+     stroke and shadow resets are important for the same reason: .scream paints
+     them independently, so a transparent fill alone leaves a ghost outline and
+     an ember shadow on the sheet. */
+.blank {
+    color: transparent !important;
+    -webkit-text-stroke: 0 !important;
+    text-shadow: none !important;
+  }
+
+  /* the small label face: uppercase, tracked out, 10px. Space Mono is a wide
+     face, so the old 0.18em — sized for Cutive Mono — opened the labels up too
+     far to read as one word. */
+.fine {
+    font-family: var(--font-fine);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.62rem;
+  }
+
+  /* handwriting: ballpoint notes in the margin. This rule did not exist, so
+     every .note was falling back to the html font and printing as mono. */
+.note {
+    font-family: var(--font-hand);
+    line-height: 1.15;
+  }
+
+  /* inside a panel the margin note takes the panel's accent. The old
+     `text-acid` utility on it is gone because utilities beat this layer —
+     leaving it would pin every panel's note yellow regardless of --accent. */
+.panel .note {
+    color: var(--accent);
+  }
+
+  /* torn rule between sections, hand-drawn rather than ruled */
+  .tear-line {
+    height: 4px;
+    background: var(--bone);
+    opacity: 0.8;
+    clip-path: polygon(
+      0% 34%, 4% 8%, 11% 46%, 17% 14%, 24% 52%, 31% 20%, 38% 58%, 45% 16%,
+      52% 50%, 59% 22%, 66% 60%, 73% 18%, 80% 54%, 87% 24%, 94% 56%, 100% 30%,
+      100% 74%, 94% 96%, 87% 66%, 80% 92%, 73% 62%, 66% 98%, 59% 68%,
+      52% 94%, 45% 66%, 38% 96%, 31% 72%, 24% 98%, 17% 70%, 11% 94%, 4% 62%, 0% 88%
+    );
+  }
+
+/* die-cut sticker: hard shadow. The tilt is applied at load from --tilt;
+   the hover lift used to live here but the placement editor is gone and
+   nothing on the page should be asking for attention when touched. */
+.sticker {
+    /* Tailwind's preflight caps images at max-width: 100%, and the sticker's
+       wrapper is absolutely positioned with no width of its own, so it
+       shrink-wraps to the image's intrinsic ~160px and every larger `size`
+       was being clamped to that instead of honoured. */
+    max-width: none;
+    filter: drop-shadow(0 2px 0 oklch(0 0 0 / 0.6))
+      drop-shadow(0 6px 12px oklch(0 0 0 / 0.5));
+    transform: rotate(var(--tilt, 0deg));
+  }
+
+  .tape {
+    background: linear-gradient(
+      100deg,
+      oklch(0.9 0.05 90 / 0.72),
+      oklch(0.82 0.07 85 / 0.6) 45%,
+      oklch(0.87 0.05 92 / 0.68)
+    );
+    filter: url(#tape-torn);
+    box-shadow: 0 2px 4px oklch(0 0 0 / 0.5);
+  }
+
+  /* The frosted partition.
+     A pane of glass standing between the viewer and the moving ground, with the
+     content on the far side of it. It carries the small text's contrast, which
+     is why the shader no longer has to darken anything underneath: real frosted
+     glass is never fully transparent, it diffuses, and the tint here is that
+     diffusion.
+
+     The grain is the other half of it. A blur on its own reads as a smeared
+     screenshot; frost is a blur plus a surface, and the surface is what the eye
+     uses to know there is glass there at all. feTurbulence is the cheapest
+     convincing answer and costs one composited background layer.
+
+     The cost is real and was measured before it was built, at 1440x900 over the
+     animating canvas: blur(18px) ran 1.73x the frame time of the shader alone,
+     blur(36px) 2.13x. That is why the shader gave up two of its three octaves
+     in the same change — the glass is already smearing the field, so paying for
+     detail underneath it buys nothing. Blur radius is the dial if it needs
+     trimming: --frost-blur.
+
+     -1 puts it behind the content but still in front of the canvas, which sits
+     at -10. */
+.partition {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    backdrop-filter: blur(var(--frost-blur)) saturate(var(--frost-sat));
+    background-color: color-mix(in oklab, var(--ground) var(--frost-tint), transparent);
+    /* grain on top, white scatter under it, tint at the bottom */
+    /* Two grain octaves and a sheen.
+
+       The grain is doing the work that a white veil cannot. Frost is a surface:
+       what the eye reads as "there is glass here" is the texture catching light,
+       not the milkiness of the material — and texture is free, because it can
+       be specular while the diffuse transmission stays dark enough to read type
+       against. Coarse grain for the frosting, a finer pass over it for the
+       sparkle real frost has, then a sheen across the top where light would
+       catch the upper edge of a pane. */
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23f)' opacity='0.55'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='90' height='90' filter='url(%23g)' opacity='0.3'/%3E%3C/svg%3E"),
+      linear-gradient(
+        color-mix(in oklab, var(--bone) var(--frost-veil), transparent) 0 100%
+      );
+    background-blend-mode: soft-light, soft-light, normal;
+    background-repeat: repeat, repeat, no-repeat;
+    background-size: 180px 180px, 90px 90px, 100% 100%;
+    opacity: 0.96;
+    border-left: 1px solid color-mix(in oklab, var(--bone) 16%, transparent);
+    border-right: 1px solid color-mix(in oklab, var(--bone) 16%, transparent);
+    /* the lit edge of a real pane: a bright hairline just inside each border */
+    box-shadow:
+      inset 1px 0 0 color-mix(in oklab, var(--bone) 9%, transparent),
+      inset -1px 0 0 color-mix(in oklab, var(--bone) 9%, transparent);
+  }
+
+  /* a comic panel: hard bone rule, its own offset shadow, a couple of degrees
+     off square. Opaque on purpose — body copy inside keeps its contrast
+     whatever the ground is doing behind the grid. --accent defaults to acid
+     so anything rendered without one reads as before; each repo panel sets
+     its own from --flare-*. */
+.panel {
+    --accent: var(--acid);
+    position: relative;
+    display: block;
+    padding: 1.7rem 1.5rem 1.2rem;
+    background: var(--ground);
+    border: 3px solid var(--bone);
+    box-shadow: 9px 9px 0 color-mix(in oklab, var(--accent) 42%, transparent);
+    transform: rotate(var(--tilt, 0deg));
+    transition:
+      transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 200ms ease;
+    /* the page's keyline is near-black, which on a black panel is a keyline
+       you cannot see. Inside the panel the lettering gets the panel's accent. */
+    --keyline: var(--accent);
+  }
+.panel:hover,
+.panel:focus-visible {
+    transform: rotate(0deg) translateY(-5px);
+    box-shadow: 14px 14px 0 color-mix(in oklab, var(--accent) 60%, transparent);
+  }
+
+  /* the printed number, straddling the frame */
+.panel-num {
+    position: absolute;
+    top: -1.5rem;
+    left: -0.9rem;
+    font-size: 3.4rem;
+    line-height: 1;
+    color: var(--acid);
+    pointer-events: none;
+  }
+
+  /* inside a panel the yellow keyline already separates the letters from the
+     fill, so the ember ink shadow would only muddy it */
+.panel .scream {
+    text-shadow: none;
+  }
+
+.panel-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1.4rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* a die-cut word chip: cut, not rounded */
+.chip {
+    display: inline-block;
+    font-family: var(--font-fine);
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--bone);
+    border: 1.5px solid var(--bone);
+    padding: 0.18rem 0.42rem;
+    transform: rotate(var(--chip-tilt, 0deg));
+  }
+
+  /* a rubber stamp, pressed slightly off true */
+.stamp {
+    display: inline-block;
+    color: var(--accent, var(--acid));
+    border: 2px solid var(--accent, var(--acid));
+    padding: 0.22rem 0.5rem;
+    transform: rotate(var(--stamp-tilt, -3deg));
+  }
+
+.repo-slab {
+    display: inline-block;
+    background: var(--accent, var(--acid));
+    color: var(--ground);
+    padding: 0.22rem 0.5rem;
+    transition:
+      background-color 160ms ease,
+      color 160ms ease;
+  }
+.panel:hover .repo-slab,
+.panel:focus-visible .repo-slab {
+    background: var(--bone);
+    color: var(--ground);
+  }
+
+  @keyframes sway {
+    0%,
+    100% {
+      transform: rotate(var(--tilt, 0deg));
+    }
+    50% {
+      transform: rotate(calc(var(--tilt, 0deg) + 0.4deg));
+    }
+  }
+  .sway {
+    animation: sway 12s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sway {
+      animation: none;
+    }
+  }
+}
+
+/* Everything below lives OUTSIDE any @layer block, on purpose. @layer
+   components above runs to end-of-file, so anything indented into it loses
+   to Tailwind utilities no matter the specificity — which is how the static
+   field survived `display: none` and every sticker drew twice. Unlayered
+   author CSS beats all layered author CSS. */
+
+/* In the sticker editor, the page content stops taking clicks so a sticker
+   sent *behind* the content can still be selected and dragged. Without this
+   a back-layer sticker sitting under a panel is unreachable. */
+html[data-sticker-edit] .page-content {
+  pointer-events: none;
+}
+
+/* The real fields are static HTML and the editor draws its own copy of the
+   same positions on top, so the originals step aside while editing. One rule
+   per section, because only the section being edited steps aside — the other
+   three keep showing their stickers, which is how you can place against them.
+   A single generic rule would match on any value of the attribute (presence,
+   not equality) and hide all four. */
+html[data-sticker-edit="hero"] [data-sticker-field="hero"],
+html[data-sticker-edit="projects"] [data-sticker-field="projects"],
+html[data-sticker-edit="about"] [data-sticker-field="about"],
+html[data-sticker-edit="contact"] [data-sticker-field="contact"] {
+  display: none;
+}

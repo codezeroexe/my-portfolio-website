@@ -1,0 +1,652 @@
+{
+  "desktop": {
+    "hero": [
+      {
+        "src": "/stickers/letters/H/h-19.webp",
+        "size": 285,
+        "tilt": -3.3,
+        "x": 8.9,
+        "y": 24.3
+      },
+      {
+        "src": "/stickers/letters/I/i-08.webp",
+        "size": 54,
+        "tilt": 7.4,
+        "x": 33.4,
+        "y": 23.1
+      },
+      {
+        "src": "/stickers/letters/R/r-12.webp",
+        "size": 101,
+        "tilt": -3.3,
+        "x": 27.4,
+        "y": 24
+      },
+      {
+        "src": "/stickers/letters/A/a-51.webp",
+        "size": 101,
+        "tilt": -3.3,
+        "x": 19.3,
+        "y": 24.3
+      },
+      {
+        "src": "/stickers/shapes/arrow-11.webp",
+        "size": 60,
+        "tilt": -139.5,
+        "x": 38.9,
+        "y": 35.7
+      },
+      {
+        "src": "/stickers/special/trademark-01.webp",
+        "size": 58,
+        "tilt": 1.2,
+        "x": 36.9,
+        "y": 16.6
+      },
+      {
+        "src": "/stickers/shapes/emoji-04.webp",
+        "size": 74,
+        "tilt": -11.8,
+        "x": 31.3,
+        "y": 80.9
+      },
+      {
+        "src": "/stickers/avengers-assemble.webp",
+        "size": 158,
+        "tilt": -11.8,
+        "x": 7.5,
+        "y": 52.6
+      },
+      {
+        "src": "/stickers/marvel.webp",
+        "size": 115,
+        "tilt": -11.8,
+        "x": 30.5,
+        "y": 43.4
+      },
+      {
+        "src": "/stickers/spidey.webp",
+        "size": 152,
+        "tilt": -11.8,
+        "x": 75.6,
+        "y": 28.6
+      },
+      {
+        "src": "/stickers/flash.webp",
+        "size": 115,
+        "tilt": 22.9,
+        "x": 83.6,
+        "y": 18.8
+      },
+      {
+        "src": "/stickers/parental-advisory.webp",
+        "size": 128,
+        "tilt": 22.9,
+        "x": 49.2,
+        "y": 27.4
+      },
+      {
+        "src": "/stickers/f1-logo.webp",
+        "size": 128,
+        "tilt": 22.9,
+        "x": 1.2,
+        "y": 75.5
+      },
+      {
+        "src": "/stickers/call-me.webp",
+        "size": 153,
+        "tilt": 22.9,
+        "x": 28.8,
+        "y": 60.4
+      },
+      {
+        "src": "/stickers/sun.webp",
+        "size": 156,
+        "tilt": 15.5,
+        "x": 99.6,
+        "y": 50.8
+      },
+      {
+        "src": "/stickers/new-york.webp",
+        "size": 139,
+        "tilt": 15.5,
+        "x": 86.5,
+        "y": 96.7
+      },
+      {
+        "src": "/stickers/acdc.webp",
+        "size": 164,
+        "tilt": -8.4,
+        "x": 61,
+        "y": 88.7
+      }
+    ],
+    "projects": [
+      {
+        "src": "/stickers/letters/B/b-22.webp",
+        "size": 66,
+        "tilt": 5.9,
+        "x": 19.7,
+        "y": 11.7
+      },
+      {
+        "src": "/stickers/letters/U/u-13.webp",
+        "size": 47,
+        "tilt": 1.2,
+        "x": 23.7,
+        "y": 12.9
+      },
+      {
+        "src": "/stickers/letters/L/l-20.webp",
+        "size": 66,
+        "tilt": -3.7,
+        "x": 31.4,
+        "y": 12.6
+      },
+      {
+        "src": "/stickers/letters/T/t-10.webp",
+        "size": 48,
+        "tilt": 5.9,
+        "x": 36,
+        "y": 12.6
+      },
+      {
+        "src": "/stickers/letters/I/i-06.webp",
+        "size": 36,
+        "tilt": 5.9,
+        "x": 27.5,
+        "y": 13.2
+      },
+      {
+        "src": "/stickers/numbers/1-10.webp",
+        "size": 45,
+        "tilt": -8,
+        "x": 0.6,
+        "y": 20.5
+      },
+      {
+        "src": "/stickers/numbers/3-03.webp",
+        "size": 72,
+        "tilt": -11.8,
+        "x": 0.8,
+        "y": 60.8
+      },
+      {
+        "src": "/stickers/numbers/2-06.webp",
+        "size": 45,
+        "tilt": 13.6,
+        "x": 52.7,
+        "y": 19.5
+      },
+      {
+        "src": "/stickers/numbers/4-10.webp",
+        "size": 55,
+        "tilt": -11.8,
+        "x": 52.6,
+        "y": 60.1
+      },
+      {
+        "src": "/stickers/80c4c992b00614ce3f0d48fda45b688a.webp",
+        "size": 85,
+        "tilt": 6.9,
+        "x": 41.5,
+        "y": 22.4
+      },
+      {
+        "src": "/stickers/4970f77a196cfc45ada0bfa525347e51.webp",
+        "size": 75,
+        "tilt": 6.9,
+        "x": 92.3,
+        "y": 23.1
+      },
+      {
+        "src": "/stickers/blazer.webp",
+        "size": 99,
+        "tilt": 6.9,
+        "x": 42.4,
+        "y": 65.3
+      },
+      {
+        "src": "/stickers/island.webp",
+        "size": 99,
+        "tilt": 6.9,
+        "x": 91.1,
+        "y": 65
+      },
+      {
+        "src": "/stickers/earth.webp",
+        "size": 104,
+        "tilt": -6.1,
+        "x": 93.1,
+        "y": 96.7
+      }
+    ],
+    "about": [
+      {
+        "src": "/stickers/letters/T/t-20.webp",
+        "size": 69,
+        "tilt": 0.9,
+        "x": 28,
+        "y": 44
+      },
+      {
+        "src": "/stickers/letters/M/m-13.webp",
+        "size": 86,
+        "tilt": -3,
+        "x": 17,
+        "y": 44
+      },
+      {
+        "src": "/stickers/letters/A/a-16.webp",
+        "size": 63,
+        "tilt": 5.9,
+        "x": 22.6,
+        "y": 44.7
+      },
+      {
+        "src": "/stickers/letters/T/t-11.webp",
+        "size": 64,
+        "tilt": -6.2,
+        "x": 33.4,
+        "y": 44.7
+      },
+      {
+        "src": "/stickers/letters/R/r-20.webp",
+        "size": 81,
+        "tilt": -3.2,
+        "x": 42.2,
+        "y": 44
+      },
+      {
+        "src": "/stickers/letters/E/e-21.webp",
+        "size": 63,
+        "tilt": 5.9,
+        "x": 36.6,
+        "y": 46.8
+      },
+      {
+        "src": "/stickers/frank-head.webp",
+        "size": 104,
+        "tilt": 15.5,
+        "x": 74.4,
+        "y": 68.3
+      },
+      {
+        "src": "/stickers/cap.webp",
+        "size": 109,
+        "tilt": -6.1,
+        "x": 87.3,
+        "y": 58.4
+      },
+      {
+        "src": "/stickers/bam-bam.webp",
+        "size": 222,
+        "tilt": -6.1,
+        "x": 65,
+        "y": 20.1
+      }
+    ],
+    "contact": [
+      {
+        "src": "/stickers/special/exclamation-mark-07.webp",
+        "size": 48,
+        "tilt": -0.6,
+        "x": 28.6,
+        "y": 32.4
+      },
+      {
+        "src": "/stickers/letters/H/h-12.webp",
+        "size": 124,
+        "tilt": 0.9,
+        "x": 17.4,
+        "y": 32.4
+      },
+      {
+        "src": "/stickers/letters/I/i-04.webp",
+        "size": 30,
+        "tilt": 12.8,
+        "x": 22.7,
+        "y": 34
+      },
+      {
+        "src": "/stickers/mouth.webp",
+        "size": 147,
+        "tilt": 15.5,
+        "x": 42,
+        "y": 53.4
+      },
+      {
+        "src": "/stickers/spider-star.webp",
+        "size": 103,
+        "tilt": 15.5,
+        "x": 83.4,
+        "y": 89.2
+      },
+      {
+        "src": "/stickers/stussy.webp",
+        "size": 188,
+        "tilt": 15.5,
+        "x": 82.6,
+        "y": 20.8
+      }
+    ]
+  },
+  "mobile": {
+    "hero": [
+      {
+        "src": "/stickers/letters/H/h-19.webp",
+        "size": 214,
+        "tilt": -7.4,
+        "x": 19.4,
+        "y": 6.5
+      },
+      {
+        "src": "/stickers/letters/I/i-08.webp",
+        "size": 50,
+        "tilt": 10.2,
+        "x": 75.2,
+        "y": 6.4
+      },
+      {
+        "src": "/stickers/letters/R/r-12.webp",
+        "size": 95,
+        "tilt": 4.4,
+        "x": 59.8,
+        "y": 6.3
+      },
+      {
+        "src": "/stickers/letters/A/a-51.webp",
+        "size": 79,
+        "tilt": -7.4,
+        "x": 39.7,
+        "y": 6.2
+      },
+      {
+        "src": "/stickers/special/trademark-01.webp",
+        "size": 67,
+        "tilt": -3.6,
+        "x": 87.6,
+        "y": 2
+      },
+      {
+        "src": "/stickers/shapes/arrow-11.webp",
+        "size": 62,
+        "tilt": -138.7,
+        "x": 94.6,
+        "y": 10.6
+      },
+      {
+        "src": "/stickers/avengers-assemble.webp",
+        "size": 173,
+        "tilt": -12.6,
+        "x": 21.9,
+        "y": 24.4
+      },
+      {
+        "src": "/stickers/marvel.webp",
+        "size": 127,
+        "tilt": -12.6,
+        "x": 84.8,
+        "y": 19.7
+      },
+      {
+        "src": "/stickers/f1-logo.webp",
+        "size": 127,
+        "tilt": -12.6,
+        "x": 11.2,
+        "y": 38.3
+      },
+      {
+        "src": "/stickers/call-me.webp",
+        "size": 155,
+        "tilt": 16.9,
+        "x": 87.5,
+        "y": 30.1
+      },
+      {
+        "src": "/stickers/shapes/emoji-04.webp",
+        "size": 68,
+        "tilt": 16.9,
+        "x": 93.8,
+        "y": 42.9
+      },
+      {
+        "src": "/stickers/spidey.webp",
+        "size": 68,
+        "tilt": 16.9,
+        "x": 90.3,
+        "y": 71.2
+      },
+      {
+        "src": "/stickers/flash.webp",
+        "size": 50,
+        "tilt": 16.9,
+        "x": 100.3,
+        "y": 68.1
+      },
+      {
+        "src": "/stickers/sun.webp",
+        "size": 88,
+        "tilt": 16.9,
+        "x": 40.2,
+        "y": 78.3
+      },
+      {
+        "src": "/stickers/new-york.webp",
+        "size": 88,
+        "tilt": 16.9,
+        "x": 88.2,
+        "y": 100
+      },
+      {
+        "src": "/stickers/acdc.webp",
+        "size": 88,
+        "tilt": -9.6,
+        "x": 38.5,
+        "y": 65.3
+      }
+    ],
+    "projects": [
+      {
+        "src": "/stickers/letters/B/b-22.webp",
+        "size": 57,
+        "tilt": -1.6,
+        "x": 41.6,
+        "y": 5.9
+      },
+      {
+        "src": "/stickers/letters/U/u-13.webp",
+        "size": 35,
+        "tilt": 3,
+        "x": 50.6,
+        "y": 6.1
+      },
+      {
+        "src": "/stickers/letters/L/l-20.webp",
+        "size": 62,
+        "tilt": -10.3,
+        "x": 65.5,
+        "y": 6.1
+      },
+      {
+        "src": "/stickers/letters/I/i-06.webp",
+        "size": 26,
+        "tilt": -2.2,
+        "x": 57.2,
+        "y": 6.1
+      },
+      {
+        "src": "/stickers/letters/T/t-10.webp",
+        "size": 32,
+        "tilt": 8.1,
+        "x": 74.5,
+        "y": 6.1
+      },
+      {
+        "src": "/stickers/numbers/1-10.webp",
+        "size": 48,
+        "tilt": -17.7,
+        "x": 1.3,
+        "y": 11.9
+      },
+      {
+        "src": "/stickers/numbers/2-06.webp",
+        "size": 50,
+        "tilt": -17.7,
+        "x": 2.4,
+        "y": 36
+      },
+      {
+        "src": "/stickers/numbers/3-03.webp",
+        "size": 72,
+        "tilt": -17.7,
+        "x": 4.9,
+        "y": 57.1
+      },
+      {
+        "src": "/stickers/numbers/4-10.webp",
+        "size": 57,
+        "tilt": -17.7,
+        "x": 2.4,
+        "y": 77.3
+      },
+      {
+        "src": "/stickers/80c4c992b00614ce3f0d48fda45b688a.webp",
+        "size": 72,
+        "tilt": -17.7,
+        "x": 86.7,
+        "y": 14.3
+      },
+      {
+        "src": "/stickers/4970f77a196cfc45ada0bfa525347e51.webp",
+        "size": 68,
+        "tilt": -17.7,
+        "x": 97.6,
+        "y": 40.7
+      },
+      {
+        "src": "/stickers/blazer.webp",
+        "size": 72,
+        "tilt": -17.7,
+        "x": 89.8,
+        "y": 58.4
+      },
+      {
+        "src": "/stickers/island.webp",
+        "size": 72,
+        "tilt": -17.7,
+        "x": 93.9,
+        "y": 84.3
+      },
+      {
+        "src": "/stickers/earth.webp",
+        "size": 90,
+        "tilt": 4,
+        "x": 76,
+        "y": 98.8
+      }
+    ],
+    "about": [
+      {
+        "src": "/stickers/letters/A/a-16.webp",
+        "size": 45,
+        "tilt": 4,
+        "x": 49.3,
+        "y": 35.9
+      },
+      {
+        "src": "/stickers/letters/M/m-25.webp",
+        "size": 72,
+        "tilt": 4,
+        "x": 36,
+        "y": 34.1
+      },
+      {
+        "src": "/stickers/letters/T/t-20.webp",
+        "size": 45,
+        "tilt": 4,
+        "x": 60.1,
+        "y": 34.1
+      },
+      {
+        "src": "/stickers/letters/R/r-20.webp",
+        "size": 70,
+        "tilt": 4,
+        "x": 82.1,
+        "y": 34.1
+      },
+      {
+        "src": "/stickers/letters/T/t-11.webp",
+        "size": 45,
+        "tilt": 4,
+        "x": 69.8,
+        "y": 33.1
+      },
+      {
+        "src": "/stickers/letters/E/e-21.webp",
+        "size": 40,
+        "tilt": 4,
+        "x": 75,
+        "y": 35
+      },
+      {
+        "src": "/stickers/frank-head.webp",
+        "size": 62,
+        "tilt": 4,
+        "x": 61.9,
+        "y": 99.2
+      },
+      {
+        "src": "/stickers/cap.webp",
+        "size": 62,
+        "tilt": 4,
+        "x": 82.6,
+        "y": 93.5
+      }
+    ],
+    "contact": [
+      {
+        "src": "/stickers/letters/H/h-12.webp",
+        "size": 102,
+        "tilt": 4,
+        "x": 35.6,
+        "y": 24.9
+      },
+      {
+        "src": "/stickers/letters/I/i-04.webp",
+        "size": 27,
+        "tilt": 4,
+        "x": 48.6,
+        "y": 27.1
+      },
+      {
+        "src": "/stickers/special/exclamation-mark-07.webp",
+        "size": 27,
+        "tilt": 4,
+        "x": 59.1,
+        "y": 21.8
+      },
+      {
+        "src": "/stickers/mouth.webp",
+        "size": 128,
+        "tilt": 4,
+        "x": 85.9,
+        "y": 46.8
+      },
+      {
+        "src": "/stickers/stussy.webp",
+        "size": 94,
+        "tilt": 4,
+        "x": 86.2,
+        "y": 102.1
+      },
+      {
+        "src": "/stickers/spider-star.webp",
+        "size": 75,
+        "tilt": 4,
+        "x": 26.6,
+        "y": 94.8
+      }
+    ]
+  }
+}
