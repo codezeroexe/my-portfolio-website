@@ -75,8 +75,6 @@ type Normalised = {
 const normalise = (): Normalised[] => [];
 
 export async function POST(req: Request) {
-  const isProd = process.env.NODE_ENV === "production";
-
   let body: Incoming;
   try {
     body = (await req.json()) as Incoming;
@@ -136,14 +134,19 @@ export async function POST(req: Request) {
     );
   }
 
-  const file = path.join(process.cwd(), draftFile(body.name));
   // Pure JSON, no leading comments. This used to carry `// written by the
   // sticker editor…` header lines for a human about to paste it, but the page
   // now reads this file directly and JSON.parse rejects a comment. Provenance
   // moved into a writtenAt field, which a parser can see and a reader still can.
   const total = SECTIONS.reduce((n, k) => n + out[k].length, 0);
 
-  if (!isProd) {
+  // The draft path is built inside a literal NODE_ENV check rather than off
+  // a variable so the production build drops it as dead code. Built at the top
+  // level, Turbopack could not tell which file a dynamic name resolves to and
+  // traced the whole project, public/ included, into this function's bundle.
+  // Production never touches the filesystem here, only the GitHub API below.
+  if (process.env.NODE_ENV !== "production") {
+    const file = path.join(process.cwd(), draftFile(body.name));
     const body_text = `${JSON.stringify(
       { writtenAt: new Date().toISOString(), name: body.name, count: total, sections: out },
       null,
