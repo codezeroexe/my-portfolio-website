@@ -44,7 +44,11 @@ export function CursorFx() {
     let on = false;
     let x = 0;
     let y = 0;
-    let lastX = 0;
+    let vel = 0; // px per ms, sideways
+    let movedT = 0; // the last move's event time, and when it arrived
+    let movedAt = 0;
+    let hot: [number, number] = HOTSPOTS.point;
+    let showTag = false;
     let inside = false;
     let down = false;
     let over: Element | null = null;
@@ -87,22 +91,25 @@ export function CursorFx() {
         const [hx, hy] = HOTSPOTS[state];
         const next = `/cursors/hand-${state}@2x.png`;
         if (next !== src) img.src = src = next;
-        const vx = x - lastX;
-        lastX = x;
+        // the pointer's speed, measured from its own events; it fades once
+        // the pointer stops, so the hand swings back upright
+        if (now - movedAt > 40) vel *= 0.6;
         if (still.matches) {
           tilt = spin = 0;
         } else {
-          // a spring pulled toward a lean that trails the movement
-          const lean = Math.max(-24, Math.min(24, vx * (16.7 / dt) * 1.3));
+          // a stiff spring pulled toward a lean that trails the movement,
+          // with a little overshoot when the hand stops
+          const lean = Math.max(-26, Math.min(26, vel * 16.7 * 1.5));
           for (let i = 0; i < steps; i++) {
-            spin = (spin + (lean - tilt) * 0.16) * 0.74;
+            spin = (spin + (lean - tilt) * 0.3) * 0.66;
             tilt += spin;
           }
         }
-        for (let i = 0; i < steps; i++) dip += ((down ? 0.86 : 1) - dip) * 0.4;
+        for (let i = 0; i < steps; i++) dip += ((down ? 0.86 : 1) - dip) * 0.45;
         img.style.transformOrigin = `${hx}px ${hy}px`;
-        img.style.transform = `translate3d(${x - hx}px, ${y - hy}px, 0) rotate(${tilt.toFixed(2)}deg) scale(${dip.toFixed(3)})`;
-        busy = vx !== 0 || Math.abs(spin) > 0.01 || Math.abs(tilt) > 0.05 || Math.abs((down ? 0.86 : 1) - dip) > 0.002;
+        hot = [hx, hy];
+        place();
+        busy = Math.abs(vel) > 0.002 || Math.abs(spin) > 0.01 || Math.abs(tilt) > 0.05 || Math.abs((down ? 0.86 : 1) - dip) > 0.002;
       }
 
       if (on && say) {
@@ -110,16 +117,27 @@ export function CursorFx() {
           words.textContent = said = say;
           tagW = tag.offsetWidth;
         }
-        // beside the hand, or on its other side near the right edge
-        const lx = x + 24 + tagW > window.innerWidth - 8 ? x - tagW - 14 : x + 24;
-        tag.style.transform = `translate3d(${lx}px, ${y + 6}px, 0) rotate(-4deg)`;
+        showTag = true;
+        placeTag();
         tag.style.opacity = "1";
       } else {
+        showTag = false;
         tag.style.opacity = "0";
       }
 
       if (busy) frame = requestAnimationFrame(tick);
       else then = owed = 0;
+    };
+
+    // the hand and its label go where the pointer is the moment it moves,
+    // not a frame later; the frame loop only turns and dips the hand
+    const place = () => {
+      img.style.transform = `translate3d(${x - hot[0]}px, ${y - hot[1]}px, 0) rotate(${tilt.toFixed(2)}deg) scale(${dip.toFixed(3)})`;
+    };
+    const placeTag = () => {
+      // beside the hand, or on its other side near the right edge
+      const lx = x + 24 + tagW > window.innerWidth - 8 ? x - tagW - 14 : x + 24;
+      tag.style.transform = `translate3d(${lx}px, ${y + 6}px, 0) rotate(-4deg)`;
     };
 
     const wake = () => {
@@ -142,12 +160,22 @@ export function CursorFx() {
 
     const move = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
+      if (inside && e.timeStamp > movedT) {
+        const v = (e.clientX - x) / Math.max(4, e.timeStamp - movedT);
+        vel = vel * 0.4 + v * 0.6;
+      }
+      movedT = e.timeStamp;
+      movedAt = performance.now();
       x = e.clientX;
       y = e.clientY;
       over = e.target as Element;
+      if (on && inside) {
+        place();
+        if (showTag) placeTag();
+      }
       if (!inside) {
         inside = true;
-        lastX = x;
+        vel = 0;
         if (on) {
           html.dataset.cursorLive = "";
           img.style.opacity = "1";
