@@ -13,7 +13,8 @@ import {
 } from "@/components/sticker-tools";
 import { Settle } from "@/components/settle";
 import { LogoSticker, LOGOS } from "@/components/logo-sticker";
-import { OnRepeat } from "@/components/on-repeat";
+import { OnRepeat, ON_REPEAT_STYLES } from "@/components/on-repeat";
+import { OnRepeatPicker } from "@/components/on-repeat-picker";
 import { weekAlbum } from "@/lib/lastfm";
 
 export const revalidate = 3600;
@@ -152,13 +153,19 @@ export default async function Home() {
             x/y are percentages of the section, not the document. A section
             that grows or shrinks takes its stickers with it, so editing the
             hero bio no longer drifts everything below it. */}
-        {/* the top corner, above the hero rather than inside it: sticker y is
-            a percentage of its section, so adding height inside the hero would
-            slide every sticker placed there. Up here the hero just moves down
-            whole. */}
+        {/* the top corner. Phones: a strip above the hero, so the hero moves
+            down whole instead of growing — sticker y is a percentage of its
+            section, and a taller hero would slide every sticker in it. Desktop:
+            lifted out of the flow into the hero's top-right corner, where the
+            Spider-Man sticker used to be, so nothing moves at all. */}
         {onRepeat && (
-          <div className="flex justify-end pt-8 md:pt-10 lg:-mb-16">
-            <OnRepeat album={onRepeat} />
+          <div className="flex justify-end pt-8 md:pt-10 lg:absolute lg:top-16 lg:right-8 lg:z-10 lg:pt-0">
+            <OnRepeatPicker
+              styles={ON_REPEAT_STYLES.map((s) => ({
+                ...s,
+                node: <OnRepeat album={onRepeat} style={s.key} />,
+              }))}
+            />
           </div>
         )}
 
