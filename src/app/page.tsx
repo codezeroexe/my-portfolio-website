@@ -249,10 +249,12 @@ export default async function Home() {
 
         {/* phones: under the hero rather than inside it. Sticker y is a
             percentage of its section, so a taller hero would slide every
-            sticker in it; out here the sections below just move down whole. */}
+            sticker in it; out here the sections below just move down whole.
+            Flipped so the New York sticker hanging off the hero lands on the
+            stub, not on the words. */}
         {onRepeat && (
-          <div className="flex justify-center pt-16 pb-10 lg:hidden">
-            <OnRepeat album={onRepeat} />
+          <div className="flex justify-center pt-6 pb-10 lg:hidden">
+            <OnRepeat album={onRepeat} flip />
           </div>
         )}
 
