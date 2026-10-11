@@ -63,8 +63,13 @@
      a smoked panel. Swapping the tint for the veil instead of stacking them
      fails immediately - at 0% veil, i.e. no white at all, the blurred spectrum
      comes through at nearly full strength and the small text drops to 3.04:1. */
-  --frost-sat: 5;
-  --frost-tint: 62%;
+  /* Saturation 10 and a wine-dark tint (--frost-ink) instead of the neutral
+     near-black: the neutral tint is what made the pane read gray. Chosen by
+     Zero from six renders; measured contrast of the 10px ash labels over the
+     empty area beside the intro is 3.19:1 (it was 3.80:1 before). */
+  --frost-sat: 10;
+  --frost-ink: oklch(0.15 0.12 22);
+  --frost-tint: 58%;
   /* Kept at 3%, and that number is a hard ceiling rather than a preference.
      Measured worst local contrast on the 10px ash labels, over the animating
      ground: 0% 5.42:1, 10% 4.03:1, 18% 3.16:1. A white veil stacks on top of
@@ -341,7 +346,7 @@
     z-index: -1;
     pointer-events: none;
     backdrop-filter: blur(var(--frost-blur)) saturate(var(--frost-sat));
-    background-color: color-mix(in oklab, var(--ground) var(--frost-tint), transparent);
+    background-color: color-mix(in oklab, var(--frost-ink) var(--frost-tint), transparent);
     /* grain on top, white scatter under it, tint at the bottom */
     /* Two grain octaves and a sheen.
 
