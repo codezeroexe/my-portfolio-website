@@ -32,8 +32,8 @@ export function ScrollTape() {
     // dragging: the pointer's height on the track is how far down the page
     const room = () => document.documentElement.scrollHeight - window.innerHeight;
     const to = (y: number) => {
-      // the tape's end sits at 30 + f * (innerHeight - 24): see globals.css
-      const f = Math.min(1, Math.max(0, (y - 30) / (window.innerHeight - 24)));
+      // the tape's end sits at 38 + f * (innerHeight - 32): see globals.css
+      const f = Math.min(1, Math.max(0, (y - 38) / (window.innerHeight - 32)));
       window.scrollTo({ top: f * room(), behavior: "instant" });
     };
     const down = (e: PointerEvent) => {

@@ -624,12 +624,13 @@ html[data-ground] .partition {
    top of the page. The strip itself is laid out flat and turned upright, so
    the torn-edge filter tears its long sides as it does the other tape. */
 .scroll-tape {
-  --tape-h: calc(36px + var(--read, 0) * (100% - 36px));
+  --tape-t: 28px; /* how wide the tape is */
+  --tape-h: calc(44px + var(--read, 0) * (100% - 44px));
   position: fixed;
   top: -6px;
   bottom: -6px;
-  right: -3px;
-  width: 15px;
+  right: -4px;
+  width: var(--tape-t);
   z-index: 60;
   pointer-events: none;
   transform: rotate(-0.25deg);
@@ -659,9 +660,9 @@ html[data-ground] .partition {
   top: 0;
   left: 0;
   width: calc(100vh + 12px);
-  height: 15px;
+  height: var(--tape-t);
   transform-origin: 0 0;
-  transform: translateX(15px) rotate(90deg);
+  transform: translateX(var(--tape-t)) rotate(90deg);
   filter: url(#tape-torn);
 }
 
@@ -671,7 +672,7 @@ html[data-ground] .partition {
   left: 0;
   right: 0;
   top: var(--tape-h);
-  height: 9px;
+  height: 14px;
   box-shadow: none;
   clip-path: polygon(0 0, 0 55%, 22% 100%, 38% 62%, 56% 100%, 74% 58%, 100% 92%, 100% 0);
 }
