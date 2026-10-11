@@ -48,7 +48,12 @@ export function OnRepeat({ album, flip = false }: { album: WeekAlbum; flip?: boo
           )}
         </span>
         <span className="tk-body">
-          <span className="tk-small block truncate font-bold">admit one · on repeat</span>
+          {/* a header row like the footer, so it holds even where the browser
+              sets small text larger than asked (a minimum font size) */}
+          <span className="tk-small flex justify-between gap-2 font-bold whitespace-nowrap tracking-[0.05em]">
+            <span>admit one</span>
+            <span>on repeat</span>
+          </span>
           <span
             title={album.name}
             className="tk-title mt-1.5 line-clamp-4 shrink-0"
@@ -63,7 +68,7 @@ export function OnRepeat({ album, flip = false }: { album: WeekAlbum; flip?: boo
           >
             {album.artist}
           </span>
-          <span className="tk-small mt-auto flex justify-between gap-3">
+          <span className="tk-small mt-auto flex justify-between gap-3 whitespace-nowrap tracking-[0.05em]">
             <span>
               {album.plays} {album.plays === 1 ? "play" : "plays"}
             </span>
