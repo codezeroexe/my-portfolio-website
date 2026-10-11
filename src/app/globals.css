@@ -410,143 +410,26 @@
     color: var(--ground);
   }
 
-  /* ── on repeat: five print treatments, one gets kept ───────────────── */
-
-  /* 1. record sleeve. Printed card like the polaroid; the disc sits behind it
-     and slides out towards the words on hover. */
-  .on-repeat {
-    --sleeve: 8.5rem;
-  }
-  /* room for the disc: at rest it reaches 24% past the sleeve, out 34% */
-  .on-repeat .deck {
-    margin-left: calc(var(--sleeve) * 0.36);
-  }
-  .on-repeat .sleeve {
-    position: relative;
-    z-index: 1;
-    display: block;
-    width: var(--sleeve);
-    height: var(--sleeve);
-    padding: 4px;
-    background: #f7f6f1;
-    transform: rotate(3deg);
-    box-shadow:
-      0.3em 0.3em 0 oklch(0 0 0 / 0.55),
-      0 10px 22px -12px oklch(0 0 0 / 0.9);
-  }
-  .on-repeat .vinyl {
-    position: absolute;
-    top: 6%;
-    right: 36%;
-    width: 88%;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    /* label, spindle hole, then grooves */
-    background:
-      radial-gradient(circle, var(--ground) 0 3%, var(--acid) 3.5% 30%, transparent 30.5%),
-      repeating-radial-gradient(circle, oklch(0.16 0 0) 0 1px, oklch(0.1 0 0) 1px 3px);
-    box-shadow: 0 6px 14px -6px oklch(0 0 0 / 0.9);
-    transition: right 400ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .on-repeat:hover .vinyl,
-  .on-repeat:focus-visible .vinyl {
-    right: 46%;
-    animation: spin 2.4s linear infinite;
-  }
-
-  /* 2. cassette. Smoked shell, paper label with the cover as the J-card, two
-     reels in the window that turn on hover. */
-  .np-cassette {
-    --cas-w: 17rem;
-    width: var(--cas-w);
-    transform: rotate(-2deg);
-  }
-  .np-cassette .cas-body {
-    display: block;
-    padding: 0.55rem 0.6rem 0.7rem;
-    border-radius: 7px;
-    background: linear-gradient(160deg, oklch(0.3 0.01 60), oklch(0.18 0.01 60));
-    border: 2px solid oklch(0.08 0 0);
-    box-shadow:
-      0.3em 0.3em 0 oklch(0 0 0 / 0.55),
-      inset 0 1px 0 oklch(1 0 0 / 0.12);
-  }
-  .np-cassette .cas-label {
-    display: flex;
-    align-items: center;
-    gap: 0.55rem;
-    padding: 0.35rem 0.45rem;
-    background: #f7f6f1;
-    /* the coloured band printed across a blank tape label */
-    background-image: linear-gradient(
-      transparent 72%,
-      var(--acid) 72% 84%,
-      transparent 84%
-    );
-  }
-  .np-cassette .cas-cover {
-    display: block;
-    width: 2.6rem;
-    height: 2.6rem;
-    flex-shrink: 0;
-    border: 1px solid oklch(0 0 0 / 0.35);
-  }
-  .np-cassette .cas-side {
-    font-size: 1.6rem;
-    color: var(--ground);
-    -webkit-text-stroke: 0;
-    text-shadow: none;
-  }
-  .np-cassette .cas-window {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    margin: 0.5rem auto 0;
-    width: 68%;
-    padding: 0.3rem 0.6rem;
-    border-radius: 999px;
-    background: oklch(0.1 0 0);
-    border: 1px solid oklch(1 0 0 / 0.14);
-  }
-  .np-cassette .cas-reel {
-    width: 1.7rem;
-    height: 1.7rem;
-    flex-shrink: 0;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle, oklch(0.1 0 0) 0 22%, transparent 23%),
-      repeating-conic-gradient(var(--bone) 0 14deg, oklch(0.75 0.01 80) 14deg 60deg);
-  }
-  .np-cassette .cas-tape {
-    flex: 1;
-    height: 0.9rem;
-    border-radius: 3px;
-    background: oklch(0.32 0.05 40);
-  }
-  .np-cassette:hover .cas-reel,
-  .np-cassette:focus-visible .cas-reel {
-    animation: spin 1.6s linear infinite;
-  }
-
-  /* 3. ticket stub. Acid card, cover on the stub, a perforated line between
-     and a notch bitten out at each end of it. */
+  /* on repeat: a gig ticket in the cover's accent colour (--tk-bg / --tk-fg,
+     set per album from lib/accent.ts). The cover runs full-bleed on the stub,
+     a dashed perforation separates it, and a notch is bitten out at each end
+     of the perforation. */
   .np-ticket {
+    --stub: 6.5rem;
     --notch: 9px;
     display: inline-flex;
     width: 20rem;
     max-width: 100%;
-    color: var(--ground);
-    background: var(--acid);
+    color: var(--tk-fg, var(--ground));
+    background: var(--tk-bg, var(--acid));
     transform: rotate(2deg);
     filter: drop-shadow(0.3em 0.3em 0 oklch(0 0 0 / 0.55));
-    /* the notches top and bottom of the perforation */
     -webkit-mask:
-      radial-gradient(circle var(--notch) at 6.5rem 0, transparent 98%, #000) top / 100% 51% no-repeat,
-      radial-gradient(circle var(--notch) at 6.5rem 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
+      radial-gradient(circle var(--notch) at var(--stub) 0, transparent 98%, #000) top / 100% 51% no-repeat,
+      radial-gradient(circle var(--notch) at var(--stub) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
     mask:
-      radial-gradient(circle var(--notch) at 6.5rem 0, transparent 98%, #000) top / 100% 51% no-repeat,
-      radial-gradient(circle var(--notch) at 6.5rem 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
+      radial-gradient(circle var(--notch) at var(--stub) 0, transparent 98%, #000) top / 100% 51% no-repeat,
+      radial-gradient(circle var(--notch) at var(--stub) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
     transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   .np-ticket:hover,
@@ -554,11 +437,20 @@
     transform: rotate(0deg) translateY(-3px);
   }
   .np-ticket .tk-stub {
+    position: relative;
     display: block;
-    width: 6.5rem;
+    width: var(--stub);
     flex-shrink: 0;
-    padding: 0.6rem;
-    border-right: 2px dashed oklch(0.13 0.012 20 / 0.55);
+    overflow: hidden;
+  }
+  /* the perforation, drawn over the cover's right edge */
+  .np-ticket .tk-stub::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    border-right: 2px dashed var(--tk-bg, var(--acid));
   }
   .np-ticket .tk-body {
     display: block;
@@ -570,137 +462,9 @@
     -webkit-text-stroke: 0;
     text-shadow: none;
   }
-
-  /* 4. polaroid + sticky note. The note overlaps the photo's corner. */
-  /* the note hangs off the photo's left side, towards the page */
-  .np-note {
-    padding: 0 0 2.6rem 0;
-  }
-  .np-note .nt-photo {
-    position: relative;
-    display: block;
-    width: 8.5rem;
-    padding: 5px 5px 1.4rem;
-    background: #f7f6f1;
-    transform: rotate(4deg);
-    box-shadow: 0 10px 22px -12px oklch(0 0 0 / 0.9);
-  }
-  .np-note .nt-note {
-    position: absolute;
-    right: 5.6rem;
-    top: 4.2rem;
-    display: block;
-    width: 10.5rem;
-    padding: 0.55rem 0.7rem 0.65rem;
-    color: oklch(0.22 0.02 40);
-    background: oklch(0.9 0.15 98);
-    transform: rotate(-3deg);
-    box-shadow:
-      0 1px 0 oklch(0 0 0 / 0.15),
-      0 12px 18px -10px oklch(0 0 0 / 0.75);
-    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .np-note:hover .nt-note,
-  .np-note:focus-visible .nt-note {
-    transform: rotate(0deg) translateY(-3px);
-  }
-
-  /* 5. xerox cutout. The cover photocopied in hard black and white with a dot
-     screen, torn out, and the title cut from coloured slabs. */
-  .np-xerox .xr-copy {
-    position: relative;
-    display: block;
-    width: 8.5rem;
-    height: 8.5rem;
-    transform: rotate(-3deg);
-    clip-path: polygon(
-      2% 4%, 18% 0%, 34% 3%, 52% 0%, 70% 4%, 88% 1%, 100% 5%, 97% 22%, 100% 41%,
-      96% 60%, 100% 79%, 97% 100%, 79% 96%, 61% 100%, 43% 97%, 25% 100%, 7% 96%,
-      0% 80%, 3% 61%, 0% 42%, 4% 23%
-    );
-    background: #f7f6f1;
-  }
-  .np-xerox .xr-copy img {
-    filter: grayscale(1) contrast(1.9) brightness(1.08);
-    mix-blend-mode: multiply;
-  }
-  .np-xerox .xr-copy::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(oklch(0 0 0 / 0.35) 32%, transparent 34%) 0 0 / 4px 4px;
-    mix-blend-mode: multiply;
-  }
-  .np-xerox .xr-tag {
-    margin-top: -0.7rem;
-    position: relative;
-    padding: 0.2rem 0.5rem;
-    color: var(--ground);
-    background: var(--bone);
-    transform: rotate(2deg);
-  }
-  .np-xerox .xr-words {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 0.2rem 0.3rem;
-    margin-top: 0.55rem;
-    max-width: 16rem;
-  }
-  .np-xerox .xr-word {
-    padding: 0.12em 0.22em 0.05em;
-    font-size: 1.6rem;
-    line-height: 0.95;
-    color: var(--ground);
-    -webkit-text-stroke: 0;
-    text-shadow: none;
-    background: var(--acid);
-    transform: rotate(-2deg);
-  }
-  .np-xerox .xr-word[data-i="1"] {
-    background: var(--slab-red);
-    transform: rotate(1.5deg);
-  }
-  .np-xerox .xr-word[data-i="2"] {
-    color: var(--bone);
-    background: var(--ground);
-    outline: 2px solid var(--bone);
-    transform: rotate(-1deg);
-  }
-
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  @media (max-width: 639px) {
-    .on-repeat {
-      --sleeve: 6.5rem;
-    }
-    .np-cassette {
-      --cas-w: 15rem;
-    }
-    .np-note .nt-photo,
-    .np-xerox .xr-copy {
-      width: 7rem;
-    }
-    .np-xerox .xr-copy {
-      height: 7rem;
-    }
-    .np-note .nt-note {
-      right: 4.6rem;
-      top: 3.4rem;
-    }
-  }
   @media (prefers-reduced-motion: reduce) {
-    .on-repeat .vinyl {
+    .np-ticket {
       transition: none;
-    }
-    .on-repeat:hover .vinyl,
-    .on-repeat:focus-visible .vinyl,
-    .np-cassette:hover .cas-reel,
-    .np-cassette:focus-visible .cas-reel {
-      animation: none;
     }
   }
 

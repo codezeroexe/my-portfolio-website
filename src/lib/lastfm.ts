@@ -1,3 +1,5 @@
+import { accentFromUrl, PAPER, type Accent } from "@/lib/accent";
+
 export const LASTFM_USER = "srhxri";
 
 export const lastfmProfile = `https://www.last.fm/user/${LASTFM_USER}`;
@@ -9,6 +11,8 @@ export type WeekAlbum = {
   /** null when Last.fm has no cover for it */
   image: string | null;
   plays: number;
+  /** the ticket colour, read from the cover */
+  accent: Accent;
 };
 
 // the slice of user.getTopAlbums the sticker reads
@@ -63,6 +67,7 @@ export async function weekAlbum(): Promise<WeekAlbum | null> {
       url: top.url,
       image,
       plays: Number(top.playcount) || 0,
+      accent: image ? await accentFromUrl(image) : PAPER,
     };
   } catch {
     return null;

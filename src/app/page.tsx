@@ -13,8 +13,7 @@ import {
 } from "@/components/sticker-tools";
 import { Settle } from "@/components/settle";
 import { LogoSticker, LOGOS } from "@/components/logo-sticker";
-import { OnRepeat, ON_REPEAT_STYLES } from "@/components/on-repeat";
-import { OnRepeatPicker } from "@/components/on-repeat-picker";
+import { OnRepeat } from "@/components/on-repeat";
 import { weekAlbum } from "@/lib/lastfm";
 
 export const revalidate = 3600;
@@ -153,19 +152,11 @@ export default async function Home() {
             x/y are percentages of the section, not the document. A section
             that grows or shrinks takes its stickers with it, so editing the
             hero bio no longer drifts everything below it. */}
-        {/* the top corner. Phones: a strip above the hero, so the hero moves
-            down whole instead of growing — sticker y is a percentage of its
-            section, and a taller hero would slide every sticker in it. Desktop:
-            lifted out of the flow into the hero's top-right corner, where the
-            Spider-Man sticker used to be, so nothing moves at all. */}
+        {/* desktop: the hero's top-right corner, where the Spider-Man sticker
+            used to be. Out of the flow, so the hero does not move. */}
         {onRepeat && (
-          <div className="flex justify-end pt-8 md:pt-10 lg:absolute lg:top-16 lg:right-8 lg:z-10 lg:pt-0">
-            <OnRepeatPicker
-              styles={ON_REPEAT_STYLES.map((s) => ({
-                ...s,
-                node: <OnRepeat album={onRepeat} style={s.key} />,
-              }))}
-            />
+          <div className="absolute top-16 right-8 z-10 hidden lg:block">
+            <OnRepeat album={onRepeat} />
           </div>
         )}
 
@@ -255,6 +246,15 @@ export default async function Home() {
 
 
         </section>
+
+        {/* phones: under the hero rather than inside it. Sticker y is a
+            percentage of its section, so a taller hero would slide every
+            sticker in it; out here the sections below just move down whole. */}
+        {onRepeat && (
+          <div className="flex justify-center pt-16 pb-10 lg:hidden">
+            <OnRepeat album={onRepeat} />
+          </div>
+        )}
 
         <div className="tear-line" aria-hidden />
 
