@@ -152,6 +152,16 @@ export default async function Home() {
             x/y are percentages of the section, not the document. A section
             that grows or shrinks takes its stickers with it, so editing the
             hero bio no longer drifts everything below it. */}
+        {/* the top corner, above the hero rather than inside it: sticker y is
+            a percentage of its section, so adding height inside the hero would
+            slide every sticker placed there. Up here the hero just moves down
+            whole. */}
+        {onRepeat && (
+          <div className="flex justify-end pt-8 md:pt-10 lg:-mb-16">
+            <OnRepeat album={onRepeat} />
+          </div>
+        )}
+
         <section id="hero" className="relative py-10 md:py-16">
           <div data-editor-host="hero" />
           <StickerField section="hero" stickers={desktop.hero} className="hidden lg:block" />
@@ -335,15 +345,6 @@ export default async function Home() {
             </div>
           </section>
         </Settle>
-
-        {/* outside every sticker section on purpose: sticker y is a
-            percentage of its section, so adding height inside About or Contact
-            would slide every sticker placed there. */}
-        {onRepeat && (
-          <div className="mt-14">
-            <OnRepeat album={onRepeat} />
-          </div>
-        )}
 
         <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-rule pt-5">
           <span className="fine text-ash">© {new Date().getFullYear()} Hari</span>
