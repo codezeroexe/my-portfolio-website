@@ -445,22 +445,28 @@
   }
   .np-ticket .tk-card {
     --notch-x: var(--stub);
+    /* where the 48px perforation strip starts: centred on the cut */
+    --perf-at: calc(var(--stub) - 24px) 0;
     position: relative;
     display: flex;
     height: var(--stub);
     background: var(--tk-bg, var(--acid));
-    /* the worn edge, intersected with a notch bitten out at each end of the
-       perforation */
+    /* the worn edge, a notch bitten out at each end of the perforation, and
+       the slits (public/ticket-holes.webp) cut right through, so the ground
+       and the card's own shadow show in them. Layers combine bottom up: the
+       slits are taken out of the lower notch, then everything intersected. */
     -webkit-mask:
       url("/ticket-edge.webp") 0 0 / 100% 100%,
-      radial-gradient(circle var(--notch) at var(--notch-x) 0, transparent 98%, #000) top / 100% 51% no-repeat,
-      radial-gradient(circle var(--notch) at var(--notch-x) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
-    -webkit-mask-composite: source-in, source-over, source-over;
+      radial-gradient(circle var(--notch) at var(--notch-x) 0, transparent 98%, #000),
+      radial-gradient(circle var(--notch) at var(--notch-x) 100%, transparent 98%, #000),
+      url("/ticket-holes.webp") var(--perf-at) / 48px 100% no-repeat;
+    -webkit-mask-composite: source-in, source-in, source-out;
     mask:
       url("/ticket-edge.webp") 0 0 / 100% 100%,
-      radial-gradient(circle var(--notch) at var(--notch-x) 0, transparent 98%, #000) top / 100% 51% no-repeat,
-      radial-gradient(circle var(--notch) at var(--notch-x) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
-    mask-composite: intersect, add, add;
+      radial-gradient(circle var(--notch) at var(--notch-x) 0, transparent 98%, #000),
+      radial-gradient(circle var(--notch) at var(--notch-x) 100%, transparent 98%, #000),
+      url("/ticket-holes.webp") var(--perf-at) / 48px 100% no-repeat;
+    mask-composite: intersect, intersect, subtract;
   }
   .np-ticket .tk-card::after {
     content: "";
@@ -477,9 +483,10 @@
     flex-shrink: 0;
     overflow: hidden;
   }
-  /* the perforation (public/ticket-perf.webp): slits punched down a line
-     that has been bent back and forth, the card's white core showing round
-     each cut and round the notches. Under the wear, over the cover. */
+  /* the bend along the perforation (public/ticket-perf.webp): the stub
+     turned a little from the light, a soft valley on the cut, ink lifted
+     between the slits and round the notches. Under the wear, over the
+     cover. */
   .np-ticket .tk-card::before {
     content: "";
     position: absolute;
@@ -487,8 +494,8 @@
     bottom: 0;
     left: var(--notch-x);
     z-index: 1;
-    width: 24px;
-    margin-left: -12px;
+    width: 48px;
+    margin-left: -24px;
     pointer-events: none;
     background: url("/ticket-perf.webp") 0 0 / 100% 100%;
   }
@@ -525,11 +532,13 @@
   }
   .np-ticket.tk-flip .tk-card {
     --notch-x: calc(100% - var(--stub));
+    --perf-at: right calc(var(--stub) - 24px) top 0;
     flex-direction: row-reverse;
   }
-  /* the wear turned with it, so the fold stays in the body, not beside the
-     perforation */
-  .np-ticket.tk-flip .tk-card::after {
+  /* the wear and the bend turned with it, so the fold stays in the body and
+     the stub side of the bend stays the shaded one */
+  .np-ticket.tk-flip .tk-card::after,
+  .np-ticket.tk-flip .tk-card::before {
     transform: scaleX(-1);
   }
   @media (prefers-reduced-motion: reduce) {
