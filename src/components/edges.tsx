@@ -186,6 +186,8 @@ export function TornPaper({
  * physical sticker's white border, so adding a ring would double it up. What is
  * left is the drop shadow, the tilt, and the lift on hover.
  */
+export type Peel = { corner: "tl" | "tr" | "bl" | "br"; rest: number; lift: number };
+
 export function Sticker({
   src,
   alt,
@@ -194,6 +196,7 @@ export function Sticker({
   className = "",
   style,
   priority = false,
+  peel,
 }: {
   src: string;
   alt: string;
@@ -202,7 +205,45 @@ export function Sticker({
   className?: string;
   style?: CSSProperties;
   priority?: boolean;
+  /** a corner that lifts off the sheet: which one, and how far in px at
+      rest and when the hand touches it (sticker-peel.tsx) */
+  peel?: Peel;
 }) {
+  if (peel) {
+    // the wrapper is the sticker (shadow and tilt); inside it the face loses
+    // the lifted corner and the flap shows the sticker's back folded over it
+    return (
+      <span
+        className={`sticker peel ${className}`}
+        data-peel={peel.corner}
+        style={
+          {
+            width: size,
+            ["--tilt" as string]: `${tilt}deg`,
+            ["--peel-rest" as string]: `${peel.rest.toFixed(1)}px`,
+            ["--peel-lift" as string]: `${peel.lift.toFixed(1)}px`,
+            ...style,
+          } as CSSProperties
+        }
+      >
+        <img
+          src={src}
+          alt={alt}
+          width={size}
+          height={size}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+          className="peel-face"
+        />
+        <span className="peel-fold">
+          <span
+            className="peel-flap"
+            style={{ maskImage: `url(${src})`, WebkitMaskImage: `url(${src})` }}
+          />
+        </span>
+      </span>
+    );
+  }
   return (
     <img
       src={src}

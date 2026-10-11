@@ -6,6 +6,7 @@ import { EdgeClips } from "@/components/edges";
 import { LiquidGround } from "@/components/liquid-ground";
 import { ViewportBadge } from "@/components/viewport-badge";
 import { ScrollTape } from "@/components/scroll-tape";
+import { StickerPeel } from "@/components/sticker-peel";
 
 const display = Anton({
   variable: "--font-display",
@@ -86,6 +87,7 @@ export default function RootLayout({
         </a>
         {children}
         <ScrollTape />
+        <StickerPeel />
         <ViewportBadge />
       </body>
     </html>
