@@ -69,7 +69,6 @@ export function ProjectSheet({
             target="_blank"
             rel="noopener noreferrer"
             aria-labelledby={`panel-${r.repo}`}
-            data-cursor-label="open the repo"
             className="panel"
             style={{
               ["--tilt" as string]: `${TILTS[i % TILTS.length]}deg`,

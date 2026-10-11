@@ -21,7 +21,6 @@ export function OnRepeat({ album, flip = false }: { album: WeekAlbum; flip?: boo
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`On repeat this week: ${album.name} by ${album.artist}, on Last.fm`}
-      data-cursor-label="on last.fm"
       className={`np-ticket${flip ? " tk-flip" : ""}`}
       style={
         {

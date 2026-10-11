@@ -5,7 +5,6 @@ import { PaperFilters } from "@/components/paper-filters";
 import { EdgeClips } from "@/components/edges";
 import { LiquidGround } from "@/components/liquid-ground";
 import { ViewportBadge } from "@/components/viewport-badge";
-import { CursorFx } from "@/components/cursor-fx";
 
 const display = Anton({
   variable: "--font-display",
@@ -85,9 +84,6 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
-        {/* the cursor is CSS (globals.css); CursorFx makes it swing and
-            adds the tape labels over links */}
-        <CursorFx />
         <ViewportBadge />
       </body>
     </html>

@@ -325,7 +325,6 @@ export default async function Home() {
             <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
               <a
                 href="mailto:srhxri06@gmail.com"
-                data-cursor-label="open mail"
                 className="group inline-block border-4 border-bone px-6 py-5 transition-transform hover:-translate-y-1"
               >
                 <span className="scream block text-2xl text-bone sm:text-3xl">
@@ -349,7 +348,6 @@ export default async function Home() {
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        data-cursor-label={say}
                         className="fine border-b-2 border-transparent pb-1 transition-colors hover:border-bone hover:text-bone"
                       >
                         {label} ↗
