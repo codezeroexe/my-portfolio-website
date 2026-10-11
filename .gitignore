@@ -1,11 +1,3 @@
-node_modules
-.next
-.env
-.env.local
-dist
-.DS_Store
-__pycache__
-
 # The machine-level ignore file (~/.config/git/ignore) ends in a blanket `**/*`,
 # so any *new* file here is silently dropped from every commit. These
 # re-include the working tree; without them, src/components/ and any component
@@ -45,5 +37,17 @@ __pycache__
 sticker-library/
 
 # drafts written by the sticker editor. Only a working file - the committed
-# placements are in src/lib/placements.ts and readDraft must not shadow them.
+# placements are in src/data/placements.json and readDraft must not shadow them.
 placements.*.draft.json
+
+# Build output, dependencies and local secrets. These must stay below the
+# re-includes above: `!*/` re-includes every directory, and git applies the
+# last matching pattern, so listed before it they were overridden and
+# node_modules/ and .next/ showed up as untracked after a build.
+node_modules/
+.next/
+.env
+.env.local
+dist/
+.DS_Store
+__pycache__/
