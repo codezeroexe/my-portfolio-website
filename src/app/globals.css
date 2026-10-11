@@ -504,15 +504,16 @@
     flex: 1;
     padding: 0.75rem 0.9rem 0.65rem;
   }
+  /* --tk-head / --tk-body are set by the temporary font switcher */
   .np-ticket .tk-title {
-    font-family: var(--font-ticket-head);
+    font-family: var(--tk-head, var(--font-ticket-head));
     line-height: 1;
     letter-spacing: 0.01em;
     text-transform: uppercase;
     overflow-wrap: anywhere;
   }
   .np-ticket .tk-small {
-    font-family: var(--font-ticket);
+    font-family: var(--tk-body, var(--font-ticket));
     font-size: 0.68rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;

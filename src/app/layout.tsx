@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Alfa_Slab_One, Anton, Archivo, Caveat, Courier_Prime, Space_Mono } from "next/font/google";
+import { Anton, Archivo, Caveat, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { PaperFilters } from "@/components/paper-filters";
 import { EdgeClips } from "@/components/edges";
 import { LiquidGround } from "@/components/liquid-ground";
 import { ViewportBadge } from "@/components/viewport-badge";
+import { ticketFontVariables } from "@/lib/ticket-fonts";
 
 const display = Anton({
   variable: "--font-display",
@@ -36,20 +37,6 @@ const fine = Space_Mono({
   weight: ["400", "700"],
 });
 
-// the on-repeat ticket only: wood-type slab for the printed title, and a
-// typewriter face for the details, the way a box office stamps a stock ticket
-const ticketHead = Alfa_Slab_One({
-  variable: "--font-ticket-head",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const ticket = Courier_Prime({
-  variable: "--font-ticket",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
 export const metadata: Metadata = {
   title: "Meet Hari!",
   description:
@@ -72,7 +59,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} ${hand.variable} ${fine.variable} ${ticketHead.variable} ${ticket.variable}`}
+      className={`${display.variable} ${body.variable} ${hand.variable} ${fine.variable} ${ticketFontVariables}`}
     >
       <body className="xerox">
         {/* the moving ground. Fixed, so it is always one viewport of canvas
