@@ -75,6 +75,20 @@ export function OnRepeat({ album, flip = false }: { album: WeekAlbum; flip?: boo
   );
 }
 
+/**
+ * Where the ticket would be, on preview deployments only: why it is not.
+ * A missing ticket otherwise looks the same whatever the cause, and the cause
+ * (a key not set, a key Last.fm rejects, a quiet week) is only in the logs.
+ */
+export function OnRepeatSkipped({ why }: { why: string }) {
+  return (
+    <p role="status" className="fine max-w-[22rem] border border-dashed border-bone/50 p-3 text-bone">
+      no ticket: {why}
+      <span className="mt-1 block text-ash normal-case">shown on previews only</span>
+    </p>
+  );
+}
+
 // Fitting the names. Both ticket faces are monospaced (measured: Rubik Mono
 // One 0.85em a character, Space Mono 0.612em), so how a name wraps at a given
 // size is plain arithmetic and is worked out here rather than in the browser.

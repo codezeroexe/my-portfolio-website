@@ -13,7 +13,7 @@ import {
 } from "@/components/sticker-tools";
 import { Settle } from "@/components/settle";
 import { LogoSticker, LOGOS } from "@/components/logo-sticker";
-import { OnRepeat } from "@/components/on-repeat";
+import { OnRepeat, OnRepeatSkipped } from "@/components/on-repeat";
 import { weekAlbum } from "@/lib/lastfm";
 
 export const revalidate = 3600;
@@ -122,7 +122,12 @@ export default async function Home() {
   // Read here, not at module scope: a top-level read is evaluated once per
   // module instance and cached, so a draft saved afterwards never shows up.
   // Production has no draft file and always reads the committed source.
-  const onRepeat = await weekAlbum();
+  const { album: onRepeat, why: onRepeatWhy } = await weekAlbum();
+  // previews (and dev) print why there is no ticket where it would be;
+  // production just leaves the space empty
+  const showWhy =
+    process.env.VERCEL_ENV === "preview" || process.env.NODE_ENV === "development";
+  const skipped = !onRepeat && showWhy && onRepeatWhy;
 
   const desktop = readDraft("PLACEMENTS_DESKTOP") ?? PLACEMENTS_DESKTOP;
   const mobile = readDraft("PLACEMENTS_MOBILE") ?? PLACEMENTS_MOBILE;
@@ -154,9 +159,9 @@ export default async function Home() {
             hero bio no longer drifts everything below it. */}
         {/* desktop: the hero's top-right corner, where the Spider-Man sticker
             used to be. Out of the flow, so the hero does not move. */}
-        {onRepeat && (
+        {(onRepeat || skipped) && (
           <div className="absolute top-16 right-8 z-10 hidden lg:block">
-            <OnRepeat album={onRepeat} />
+            {onRepeat ? <OnRepeat album={onRepeat} /> : <OnRepeatSkipped why={onRepeatWhy!} />}
           </div>
         )}
 
@@ -252,9 +257,9 @@ export default async function Home() {
             sticker in it; out here the sections below just move down whole.
             Flipped so the New York sticker hanging off the hero lands on the
             stub, not on the words. */}
-        {onRepeat && (
+        {(onRepeat || skipped) && (
           <div className="flex justify-center pt-6 pb-10 lg:hidden">
-            <OnRepeat album={onRepeat} flip />
+            {onRepeat ? <OnRepeat album={onRepeat} flip /> : <OnRepeatSkipped why={onRepeatWhy!} />}
           </div>
         )}
 
