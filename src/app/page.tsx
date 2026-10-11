@@ -264,14 +264,14 @@ export default async function Home() {
           </div>
         )}
 
-        <div className="tear-line" aria-hidden />
+        <div className="caution" style={{ "--tilt": "-0.7deg" } as React.CSSProperties} aria-hidden />
 
         {/* ── work ──────────────────────────────────────────────────── */}
         <Settle>
           <ProjectSheet repos={repos} desktop={desktop} mobile={mobile} />
         </Settle>
 
-        <div className="tear-line" aria-hidden />
+        <div className="caution" style={{ "--tilt": "0.5deg" } as React.CSSProperties} aria-hidden />
 
         {/* ── method ────────────────────────────────────────────────── */}
         <Settle>
@@ -310,7 +310,7 @@ export default async function Home() {
           </section>
         </Settle>
 
-        <div className="tear-line" aria-hidden />
+        <div className="caution" style={{ "--tilt": "-0.4deg" } as React.CSSProperties} aria-hidden />
 
         {/* ── contact ───────────────────────────────────────────────── */}
         <Settle>
