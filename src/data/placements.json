@@ -2,34 +2,6 @@
   "desktop": {
     "hero": [
       {
-        "src": "/stickers/letters/H/h-19.webp",
-        "size": 285,
-        "tilt": -3.3,
-        "x": 8.9,
-        "y": 24.3
-      },
-      {
-        "src": "/stickers/letters/I/i-08.webp",
-        "size": 54,
-        "tilt": 7.4,
-        "x": 33.4,
-        "y": 23.1
-      },
-      {
-        "src": "/stickers/letters/R/r-12.webp",
-        "size": 101,
-        "tilt": -3.3,
-        "x": 27.4,
-        "y": 24
-      },
-      {
-        "src": "/stickers/letters/A/a-51.webp",
-        "size": 101,
-        "tilt": -3.3,
-        "x": 19.3,
-        "y": 24.3
-      },
-      {
         "src": "/stickers/shapes/arrow-11.webp",
         "size": 60,
         "tilt": -139.5,
@@ -37,11 +9,11 @@
         "y": 35.7
       },
       {
-        "src": "/stickers/special/trademark-01.webp",
-        "size": 58,
-        "tilt": 1.2,
-        "x": 36.9,
-        "y": 16.6
+        "src": "/stickers/merged/desktop-hero-7877e34f.webp",
+        "size": 529,
+        "tilt": 0,
+        "x": 17.51,
+        "y": 24.89
       },
       {
         "src": "/stickers/shapes/emoji-04.webp",
@@ -65,18 +37,11 @@
         "y": 43.4
       },
       {
-        "src": "/stickers/spidey.webp",
-        "size": 152,
-        "tilt": -11.8,
-        "x": 75.6,
-        "y": 28.6
-      },
-      {
-        "src": "/stickers/flash.webp",
-        "size": 115,
-        "tilt": 22.9,
-        "x": 83.6,
-        "y": 18.8
+        "src": "/stickers/merged/desktop-hero-de3ef5ce.webp",
+        "size": 304,
+        "tilt": 0,
+        "x": 79.04,
+        "y": 25.18
       },
       {
         "src": "/stickers/parental-advisory.webp",
@@ -123,39 +88,11 @@
     ],
     "projects": [
       {
-        "src": "/stickers/letters/B/b-22.webp",
-        "size": 66,
-        "tilt": 5.9,
-        "x": 19.7,
-        "y": 11.7
-      },
-      {
-        "src": "/stickers/letters/U/u-13.webp",
-        "size": 47,
-        "tilt": 1.2,
-        "x": 23.7,
-        "y": 12.9
-      },
-      {
-        "src": "/stickers/letters/L/l-20.webp",
-        "size": 66,
-        "tilt": -3.7,
-        "x": 31.4,
-        "y": 12.6
-      },
-      {
-        "src": "/stickers/letters/T/t-10.webp",
-        "size": 48,
-        "tilt": 5.9,
-        "x": 36,
-        "y": 12.6
-      },
-      {
-        "src": "/stickers/letters/I/i-06.webp",
-        "size": 36,
-        "tilt": 5.9,
-        "x": 27.5,
-        "y": 13.2
+        "src": "/stickers/merged/desktop-projects-929bff6c.webp",
+        "size": 291,
+        "tilt": 0,
+        "x": 27.44,
+        "y": 13.83
       },
       {
         "src": "/stickers/numbers/1-10.webp",
@@ -223,46 +160,11 @@
     ],
     "about": [
       {
-        "src": "/stickers/letters/T/t-20.webp",
-        "size": 69,
-        "tilt": 0.9,
-        "x": 28,
-        "y": 44
-      },
-      {
-        "src": "/stickers/letters/M/m-13.webp",
-        "size": 86,
-        "tilt": -3,
-        "x": 17,
-        "y": 44
-      },
-      {
-        "src": "/stickers/letters/A/a-16.webp",
-        "size": 63,
-        "tilt": 5.9,
-        "x": 22.6,
-        "y": 44.7
-      },
-      {
-        "src": "/stickers/letters/T/t-11.webp",
-        "size": 64,
-        "tilt": -6.2,
-        "x": 33.4,
-        "y": 44.7
-      },
-      {
-        "src": "/stickers/letters/R/r-20.webp",
-        "size": 81,
-        "tilt": -3.2,
-        "x": 42.2,
-        "y": 44
-      },
-      {
-        "src": "/stickers/letters/E/e-21.webp",
-        "size": 63,
-        "tilt": 5.9,
-        "x": 36.6,
-        "y": 46.8
+        "src": "/stickers/merged/desktop-about-cf95fa2e.webp",
+        "size": 411,
+        "tilt": 0,
+        "x": 29.46,
+        "y": 46.9
       },
       {
         "src": "/stickers/frank-head.webp",
@@ -295,18 +197,11 @@
         "y": 32.4
       },
       {
-        "src": "/stickers/letters/H/h-12.webp",
-        "size": 124,
-        "tilt": 0.9,
-        "x": 17.4,
-        "y": 32.4
-      },
-      {
-        "src": "/stickers/letters/I/i-04.webp",
-        "size": 30,
-        "tilt": 12.8,
-        "x": 22.7,
-        "y": 34
+        "src": "/stickers/merged/desktop-contact-07f08253.webp",
+        "size": 193,
+        "tilt": 0,
+        "x": 18.24,
+        "y": 34.79
       },
       {
         "src": "/stickers/mouth.webp",
@@ -334,39 +229,11 @@
   "mobile": {
     "hero": [
       {
-        "src": "/stickers/letters/H/h-19.webp",
-        "size": 214,
-        "tilt": -7.4,
-        "x": 19.4,
-        "y": 6.5
-      },
-      {
-        "src": "/stickers/letters/I/i-08.webp",
-        "size": 50,
-        "tilt": 10.2,
-        "x": 75.2,
-        "y": 6.4
-      },
-      {
-        "src": "/stickers/letters/R/r-12.webp",
-        "size": 95,
-        "tilt": 4.4,
-        "x": 59.8,
-        "y": 6.3
-      },
-      {
-        "src": "/stickers/letters/A/a-51.webp",
-        "size": 79,
-        "tilt": -7.4,
-        "x": 39.7,
-        "y": 6.2
-      },
-      {
-        "src": "/stickers/special/trademark-01.webp",
-        "size": 67,
-        "tilt": -3.6,
-        "x": 87.6,
-        "y": 2
+        "src": "/stickers/merged/mobile-hero-e6ee0d50.webp",
+        "size": 510,
+        "tilt": 0,
+        "x": 45,
+        "y": 6.62
       },
       {
         "src": "/stickers/shapes/arrow-11.webp",
@@ -411,18 +278,11 @@
         "y": 42.9
       },
       {
-        "src": "/stickers/spidey.webp",
-        "size": 68,
-        "tilt": 16.9,
-        "x": 90.3,
-        "y": 71.2
-      },
-      {
-        "src": "/stickers/flash.webp",
-        "size": 50,
-        "tilt": 16.9,
-        "x": 100.3,
-        "y": 68.1
+        "src": "/stickers/merged/mobile-hero-9533361a.webp",
+        "size": 170,
+        "tilt": 0,
+        "x": 94.13,
+        "y": 70.63
       },
       {
         "src": "/stickers/sun.webp",
@@ -448,39 +308,11 @@
     ],
     "projects": [
       {
-        "src": "/stickers/letters/B/b-22.webp",
-        "size": 57,
-        "tilt": -1.6,
-        "x": 41.6,
-        "y": 5.9
-      },
-      {
-        "src": "/stickers/letters/U/u-13.webp",
-        "size": 35,
-        "tilt": 3,
-        "x": 50.6,
-        "y": 6.1
-      },
-      {
-        "src": "/stickers/letters/L/l-20.webp",
-        "size": 62,
-        "tilt": -10.3,
-        "x": 65.5,
-        "y": 6.1
-      },
-      {
-        "src": "/stickers/letters/I/i-06.webp",
-        "size": 26,
-        "tilt": -2.2,
-        "x": 57.2,
-        "y": 6.1
-      },
-      {
-        "src": "/stickers/letters/T/t-10.webp",
-        "size": 32,
-        "tilt": 8.1,
-        "x": 74.5,
-        "y": 6.1
+        "src": "/stickers/merged/mobile-projects-4abd965c.webp",
+        "size": 250,
+        "tilt": 0,
+        "x": 56.96,
+        "y": 6.56
       },
       {
         "src": "/stickers/numbers/1-10.webp",
@@ -562,32 +394,11 @@
         "y": 34.1
       },
       {
-        "src": "/stickers/letters/T/t-20.webp",
-        "size": 45,
-        "tilt": 4,
-        "x": 60.1,
-        "y": 34.1
-      },
-      {
-        "src": "/stickers/letters/R/r-20.webp",
-        "size": 70,
-        "tilt": 4,
-        "x": 82.1,
-        "y": 34.1
-      },
-      {
-        "src": "/stickers/letters/T/t-11.webp",
-        "size": 45,
-        "tilt": 4,
-        "x": 69.8,
-        "y": 33.1
-      },
-      {
-        "src": "/stickers/letters/E/e-21.webp",
-        "size": 40,
-        "tilt": 4,
-        "x": 75,
-        "y": 35
+        "src": "/stickers/merged/mobile-about-f5fb6313.webp",
+        "size": 211,
+        "tilt": 0,
+        "x": 72.5,
+        "y": 35.4
       },
       {
         "src": "/stickers/frank-head.webp",
@@ -606,18 +417,11 @@
     ],
     "contact": [
       {
-        "src": "/stickers/letters/H/h-12.webp",
-        "size": 102,
-        "tilt": 4,
-        "x": 35.6,
-        "y": 24.9
-      },
-      {
-        "src": "/stickers/letters/I/i-04.webp",
-        "size": 27,
-        "tilt": 4,
-        "x": 48.6,
-        "y": 27.1
+        "src": "/stickers/merged/mobile-contact-0c335a62.webp",
+        "size": 179,
+        "tilt": 0,
+        "x": 37.93,
+        "y": 27.05
       },
       {
         "src": "/stickers/special/exclamation-mark-07.webp",
