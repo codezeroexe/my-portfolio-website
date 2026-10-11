@@ -14,8 +14,6 @@ import {
 import { Settle } from "@/components/settle";
 import { LogoSticker, LOGOS } from "@/components/logo-sticker";
 import { OnRepeat } from "@/components/on-repeat";
-import { TicketFontPicker } from "@/components/ticket-font-picker";
-import { TICKET_FONTS } from "@/lib/ticket-fonts";
 import { weekAlbum } from "@/lib/lastfm";
 
 export const revalidate = 3600;
@@ -161,7 +159,6 @@ export default async function Home() {
             <OnRepeat album={onRepeat} />
           </div>
         )}
-        {onRepeat && <TicketFontPicker fonts={TICKET_FONTS} />}
 
         <section id="hero" className="relative py-10 md:py-16">
           <div data-editor-host="hero" />
