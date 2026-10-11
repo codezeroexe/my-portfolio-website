@@ -901,7 +901,7 @@ html[data-tape]::-webkit-scrollbar {
   transform: translateY(-3px);
 }
 .receipt-ink {
-  opacity: 0.85;
+  opacity: 0.95;
 }
 @media print {
   .receipt-wrap { filter: none; }

@@ -239,12 +239,22 @@ LAYOUTS = {
     ),
 }
 
+# how much of the wear is kept, 0..1. LEVEL=0.5 python3 scripts/weather-receipt.py
+# LEVELS=0.08,0.15 writes <name>-wear-<level>.webp for each, to compare.
+LEVEL = 0.08
+
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
+    env = os.environ.get("LEVELS")
+    levels = [float(x) for x in env.split(",")] if env else [LEVEL]
     for name, lay in LAYOUTS.items():
         S, w = wear(lay["W"], lay["H"], lay["seed"], lay)
         shp = np.dstack([np.full(S.shape + (3,), 255), S * 255]).astype(np.uint8)
         Image.fromarray(shp, "RGBA").save(os.path.join(OUT, f"{name}-shape.webp"), quality=90, method=6)
-        Image.fromarray(w, "RGBA").save(os.path.join(OUT, f"{name}-wear.webp"), quality=78, method=6)
-        print(name, os.path.getsize(os.path.join(OUT, f"{name}-wear.webp")) // 1024, "KB wear",
-              os.path.getsize(os.path.join(OUT, f"{name}-shape.webp")) // 1024, "KB shape")
+        for lv in levels:
+            v = w.copy()
+            v[..., 3] = (v[..., 3] * lv).astype(np.uint8)
+            suffix = f"-{lv}" if env else ""
+            f = os.path.join(OUT, f"{name}-wear{suffix}.webp")
+            Image.fromarray(v, "RGBA").save(f, quality=78, method=6)
+            print(f, os.path.getsize(f) // 1024, "KB")

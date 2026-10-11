@@ -71,7 +71,7 @@ export function Receipt({ year }: { year: number }) {
             <ul className="grid grid-cols-2 gap-x-3 gap-y-2">
               {LOGOS.map((l) => (
                 <li key={l.src} className="flex items-center gap-2">
-                  <img src={l.src} alt="" width={18} height={18} loading="lazy" decoding="async" className="receipt-ink h-[18px] w-[18px] shrink-0" />
+                  <img src={l.src.replace("/logos/", "/logos/ink/")} alt="" width={22} height={22} loading="lazy" decoding="async" className="receipt-ink h-[22px] w-[22px] shrink-0" />
                   <span className="min-w-0 flex-1 truncate">{l.label}</span>
                 </li>
               ))}
