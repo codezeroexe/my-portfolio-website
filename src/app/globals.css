@@ -410,6 +410,69 @@
     color: var(--ground);
   }
 
+  /* the on-repeat record: a square sleeve with the disc half out of it. The
+     sleeve is printed card like the polaroid, so it gets the same card stock
+     edge and drop shadow; the disc sits behind it and slides further out on
+     hover. */
+  .on-repeat {
+    --sleeve: 8.25rem;
+  }
+  /* room for the disc: at rest it reaches 124% of the sleeve, out 134% */
+  .on-repeat .deck {
+    margin-right: calc(var(--sleeve) * 0.36);
+  }
+  .on-repeat .sleeve {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: var(--sleeve);
+    height: var(--sleeve);
+    padding: 4px;
+    background: #f7f6f1;
+    transform: rotate(-3deg);
+    box-shadow:
+      0.3em 0.3em 0 oklch(0 0 0 / 0.55),
+      0 10px 22px -12px oklch(0 0 0 / 0.9);
+  }
+  .on-repeat .vinyl {
+    position: absolute;
+    top: 6%;
+    left: 36%;
+    width: 88%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    /* label, spindle hole, then grooves */
+    background:
+      radial-gradient(circle, var(--ground) 0 3%, var(--acid) 3.5% 30%, transparent 30.5%),
+      repeating-radial-gradient(circle, oklch(0.16 0 0) 0 1px, oklch(0.1 0 0) 1px 3px);
+    box-shadow: 0 6px 14px -6px oklch(0 0 0 / 0.9);
+    transition: left 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .on-repeat:hover .vinyl,
+  .on-repeat:focus-visible .vinyl {
+    left: 46%;
+    animation: spin 2.4s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (max-width: 639px) {
+    .on-repeat {
+      --sleeve: 6.75rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .on-repeat .vinyl {
+      transition: none;
+    }
+    .on-repeat:hover .vinyl,
+    .on-repeat:focus-visible .vinyl {
+      animation: none;
+    }
+  }
+
   @keyframes sway {
     0%,
     100% {

@@ -13,6 +13,8 @@ import {
 } from "@/components/sticker-tools";
 import { Settle } from "@/components/settle";
 import { LogoSticker, LOGOS } from "@/components/logo-sticker";
+import { OnRepeat } from "@/components/on-repeat";
+import { weekAlbum } from "@/lib/lastfm";
 
 export const revalidate = 3600;
 
@@ -120,6 +122,8 @@ export default async function Home() {
   // Read here, not at module scope: a top-level read is evaluated once per
   // module instance and cached, so a draft saved afterwards never shows up.
   // Production has no draft file and always reads the committed source.
+  const onRepeat = await weekAlbum();
+
   const desktop = readDraft("PLACEMENTS_DESKTOP") ?? PLACEMENTS_DESKTOP;
   const mobile = readDraft("PLACEMENTS_MOBILE") ?? PLACEMENTS_MOBILE;
 
@@ -277,6 +281,7 @@ export default async function Home() {
                 </p>
               </div>
             </div>
+
           </section>
         </Settle>
 
@@ -330,6 +335,15 @@ export default async function Home() {
             </div>
           </section>
         </Settle>
+
+        {/* outside every sticker section on purpose: sticker y is a
+            percentage of its section, so adding height inside About or Contact
+            would slide every sticker placed there. */}
+        {onRepeat && (
+          <div className="mt-14">
+            <OnRepeat album={onRepeat} />
+          </div>
+        )}
 
         <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-rule pt-5">
           <span className="fine text-ash">© {new Date().getFullYear()} Hari</span>
