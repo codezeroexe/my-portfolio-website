@@ -427,10 +427,12 @@
      other edge on the sheet (paper-filters.tsx): it cuts the silhouette and
      leaves the type alone. */
   .np-ticket {
-    --stub: 6.5rem;
+    /* the stub is square and the card as tall as it, so the whole cover
+       shows. The title's fitting in on-repeat.tsx counts on these sizes. */
+    --stub: 9rem;
     --notch: 9px;
     display: inline-block;
-    width: 20rem;
+    width: 22rem;
     max-width: 100%;
     color: color-mix(in oklab, var(--tk-fg, var(--ground)) 88%, transparent);
     transform: rotate(2deg);
@@ -445,6 +447,7 @@
     --notch-x: var(--stub);
     position: relative;
     display: flex;
+    height: var(--stub);
     background: var(--tk-bg, var(--acid));
     /* the worn edge, intersected with a notch bitten out at each end of the
        perforation */
@@ -474,20 +477,29 @@
     flex-shrink: 0;
     overflow: hidden;
   }
-  /* the perforation, over the cover's inner edge */
-  .np-ticket .tk-stub::after {
+  /* the perforation (public/ticket-perf.webp): slits punched down a line
+     that has been bent back and forth, the card's white core showing round
+     each cut and round the notches. Under the wear, over the cover. */
+  .np-ticket .tk-card::before {
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
-    right: 0;
-    border-right: 2px dashed var(--tk-bg, var(--acid));
+    left: var(--notch-x);
+    z-index: 1;
+    width: 24px;
+    margin-left: -12px;
+    pointer-events: none;
+    background: url("/ticket-perf.webp") 0 0 / 100% 100%;
   }
   .np-ticket .tk-body {
-    display: block;
+    display: flex;
+    flex-direction: column;
     min-width: 0;
     flex: 1;
     padding: 0.75rem 0.9rem 0.65rem;
+    /* the title and artist are sized against this column (on-repeat.tsx) */
+    container-type: inline-size;
   }
   .np-ticket .tk-title {
     font-family: var(--font-ticket);
@@ -520,15 +532,26 @@
   .np-ticket.tk-flip .tk-card::after {
     transform: scaleX(-1);
   }
-  .np-ticket.tk-flip .tk-stub::after {
-    right: auto;
-    left: 0;
-    border-right: 0;
-    border-left: 2px dashed var(--tk-bg, var(--acid));
-  }
   @media (prefers-reduced-motion: reduce) {
     .np-ticket {
       transition: none;
+    }
+  }
+  /* phones narrower than the ticket: shrink the whole thing rather than
+     squeeze the body, so the title keeps the room it was fitted to */
+  @media (max-width: 389px) {
+    .np-ticket {
+      zoom: 0.9;
+    }
+  }
+  @media (max-width: 356px) {
+    .np-ticket {
+      zoom: 0.8;
+    }
+  }
+  @media (max-width: 321px) {
+    .np-ticket {
+      zoom: 0.78;
     }
   }
 
