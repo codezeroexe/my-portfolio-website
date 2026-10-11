@@ -582,6 +582,78 @@
       animation: none;
     }
   }
+
+  /* Marker doodles (zine-extras.tsx). The layer sits at the document's
+     top-left and is as wide as the page, so a doodle's left/top are the
+     click's page coordinates and it scrolls with the sheet. The ink is the
+     cursor's: a paint pen in bone, a fibre tip in ember, a highlighter in
+     acid laid on a little thin, so overlaps build up. */
+  .doodle-layer {
+    --marker-ink: var(--ember);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    z-index: 40;
+    pointer-events: none;
+  }
+  html[data-cursor="paint"] .doodle-layer {
+    --marker-ink: var(--bone);
+  }
+  html[data-cursor="highlighter"] .doodle-layer {
+    --marker-ink: var(--acid);
+    --marker-opacity: 0.85;
+    --marker-cap: butt;
+  }
+  .doodle {
+    position: absolute;
+    color: var(--marker-ink);
+    transform: translate(-50%, -50%) rotate(var(--rot));
+    overflow: visible;
+    transition: opacity 0.7s ease;
+  }
+  .doodle path {
+    fill: none;
+    stroke: currentColor;
+    stroke-opacity: var(--marker-opacity, 1);
+    stroke-linecap: var(--marker-cap, round);
+    stroke-linejoin: round;
+    /* written on: the dash is the whole stroke and starts fully offset */
+    stroke-dasharray: 1 2;
+    animation: doodle-draw linear backwards;
+  }
+  @keyframes doodle-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+  .doodle-word {
+    font-family: var(--font-hand);
+    font-weight: 700;
+    font-size: 2.3rem;
+    line-height: 1;
+    white-space: nowrap;
+    opacity: var(--marker-opacity, 1);
+    animation: doodle-write 380ms steps(7, end) backwards;
+  }
+  @keyframes doodle-write {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  .doodle-gone {
+    opacity: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .doodle path,
+    .doodle-word {
+      animation: none;
+    }
+  }
 }
 
 /* Everything below lives OUTSIDE any @layer block, on purpose. @layer
@@ -608,4 +680,42 @@ html[data-sticker-edit="projects"] [data-sticker-field="projects"],
 html[data-sticker-edit="about"] [data-sticker-field="about"],
 html[data-sticker-edit="contact"] [data-sticker-field="contact"] {
   display: none;
+}
+/* Marker-pen cursors (zine-extras). Drawn as little stickers, felt tip at
+   (8, 8); over anything clickable an ink blot under the tip stands in for
+   the pointing hand. Mouse and trackpad only, never in the sticker editor.
+   Unlayered so Tailwind's cursor utilities do not put the hand back. Each
+   rule says it three ways: plain url for any browser, then the prefixed and
+   unprefixed image-set for a sharp 2x; a browser keeps the last it reads. */
+@media (pointer: fine) {
+  html[data-cursor="paint"]:not([data-sticker-edit]) {
+    cursor: url("/extras/cursor-paint.png") 8 8, auto;
+    cursor: -webkit-image-set(url("/extras/cursor-paint.png") 1x, url("/extras/cursor-paint@2x.png") 2x) 8 8, auto;
+    cursor: image-set(url("/extras/cursor-paint.png") 1x, url("/extras/cursor-paint@2x.png") 2x) 8 8, auto;
+  }
+  html[data-cursor="paint"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/extras/cursor-paint-point.png") 8 8, pointer;
+    cursor: -webkit-image-set(url("/extras/cursor-paint-point.png") 1x, url("/extras/cursor-paint-point@2x.png") 2x) 8 8, pointer;
+    cursor: image-set(url("/extras/cursor-paint-point.png") 1x, url("/extras/cursor-paint-point@2x.png") 2x) 8 8, pointer;
+  }
+  html[data-cursor="red"]:not([data-sticker-edit]) {
+    cursor: url("/extras/cursor-red.png") 8 8, auto;
+    cursor: -webkit-image-set(url("/extras/cursor-red.png") 1x, url("/extras/cursor-red@2x.png") 2x) 8 8, auto;
+    cursor: image-set(url("/extras/cursor-red.png") 1x, url("/extras/cursor-red@2x.png") 2x) 8 8, auto;
+  }
+  html[data-cursor="red"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/extras/cursor-red-point.png") 8 8, pointer;
+    cursor: -webkit-image-set(url("/extras/cursor-red-point.png") 1x, url("/extras/cursor-red-point@2x.png") 2x) 8 8, pointer;
+    cursor: image-set(url("/extras/cursor-red-point.png") 1x, url("/extras/cursor-red-point@2x.png") 2x) 8 8, pointer;
+  }
+  html[data-cursor="highlighter"]:not([data-sticker-edit]) {
+    cursor: url("/extras/cursor-highlighter.png") 8 8, auto;
+    cursor: -webkit-image-set(url("/extras/cursor-highlighter.png") 1x, url("/extras/cursor-highlighter@2x.png") 2x) 8 8, auto;
+    cursor: image-set(url("/extras/cursor-highlighter.png") 1x, url("/extras/cursor-highlighter@2x.png") 2x) 8 8, auto;
+  }
+  html[data-cursor="highlighter"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/extras/cursor-highlighter-point.png") 8 8, pointer;
+    cursor: -webkit-image-set(url("/extras/cursor-highlighter-point.png") 1x, url("/extras/cursor-highlighter-point@2x.png") 2x) 8 8, pointer;
+    cursor: image-set(url("/extras/cursor-highlighter-point.png") 1x, url("/extras/cursor-highlighter-point@2x.png") 2x) 8 8, pointer;
+  }
 }

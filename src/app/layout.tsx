@@ -5,6 +5,8 @@ import { PaperFilters } from "@/components/paper-filters";
 import { EdgeClips } from "@/components/edges";
 import { LiquidGround } from "@/components/liquid-ground";
 import { ViewportBadge } from "@/components/viewport-badge";
+import { ZineExtras } from "@/components/zine-extras";
+import { DEFAULT_MARKER } from "@/lib/zine-extras";
 
 const display = Anton({
   variable: "--font-display",
@@ -66,6 +68,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-cursor={DEFAULT_MARKER}
       className={`${display.variable} ${body.variable} ${hand.variable} ${fine.variable} ${ticket.variable}`}
     >
       <body className="xerox">
@@ -84,6 +87,9 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
+        {/* the marker cursor and the doodles it draws on click; the picker shows on
+            previews and in development only */}
+        <ZineExtras picker={process.env.VERCEL_ENV !== "production"} />
         <ViewportBadge />
       </body>
     </html>
