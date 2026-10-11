@@ -701,3 +701,11 @@ html[data-sticker-edit="contact"] [data-sticker-field="contact"] {
     cursor: image-set(url("/cursors/hand-press.png") 1x, url("/cursors/hand-press@2x.png") 2x) 15 5, pointer;
   }
 }
+
+/* liquid-ground.tsx blurs and saturates the ground itself (the same 34px and
+   5 as --frost-blur and --frost-sat above, which it mirrors), so the pane
+   does not have to redo that on a live backdrop every frame. Without webgl2
+   the attribute is never set and the pane blurs the CSS wash as before. */
+html[data-ground] .partition {
+  backdrop-filter: none;
+}
