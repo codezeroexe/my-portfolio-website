@@ -807,3 +807,48 @@ html[data-tape]::-webkit-scrollbar {
     transition: none;
   }
 }
+
+/* till-receipt "about" block. The wrapper carries the shadow because a mask
+   on .receipt would clip its own drop-shadow. */
+.receipt-wrap {
+  max-width: 24rem;
+  transform: rotate(1.1deg);
+  filter: drop-shadow(0 3px 0 oklch(0 0 0 / 0.55)) drop-shadow(0 10px 14px oklch(0 0 0 / 0.45));
+}
+.receipt {
+  --zig: 14px;
+  padding: 22px 22px 24px;
+  background: oklch(0.955 0.014 90);
+  color: oklch(0.25 0.01 60);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  -webkit-mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--zig) 51% repeat-x,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--zig) 51% repeat-x;
+  mask:
+    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--zig) 51% repeat-x,
+    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--zig) 51% repeat-x;
+}
+.receipt-rule {
+  margin: 9px 0;
+  border: 0;
+  border-top: 1.5px dashed currentColor;
+  opacity: 0.55;
+}
+.receipt-dots {
+  flex: 1 1 auto;
+  min-width: 8px;
+  border-bottom: 1.5px dotted currentColor;
+  opacity: 0.5;
+  transform: translateY(-3px);
+}
+.receipt-ink {
+  opacity: 0.85;
+}
+@media print {
+  .receipt-wrap { filter: none; }
+}
+@media (min-width: 768px) {
+  .receipt-wrap { max-width: 38rem; }
+}
