@@ -410,6 +410,160 @@
     color: var(--ground);
   }
 
+  /* on repeat: a worn gig ticket in the cover's accent colour (--tk-bg /
+     --tk-fg, set per album from lib/accent.ts).
+
+     Two boxes because of the order CSS paints in: filter, then clip, then
+     mask. The shadow lives on the outer link so it follows the shape the
+     inner card is cut to; on the card itself the mask would cut the shadow
+     away with the edge.
+
+     The wear is one generated texture (public/ticket-wear.webp): ink rubbed
+     off along the edges and corners, a fold cracked along its crest, a
+     corner once bent, uneven print, scuffs and grime. It is laid over
+     everything, cover included, so the stub reads as printed on the same
+     card. The edge (public/ticket-edge.webp: corners rounded by handling, a
+     few chips) is a mask, not a displacement, for the same reason as every
+     other edge on the sheet (paper-filters.tsx): it cuts the silhouette and
+     leaves the type alone. */
+  .np-ticket {
+    /* the stub is square and the card as tall as it, so the whole cover
+       shows. The title's fitting in on-repeat.tsx counts on these sizes. */
+    --stub: 9rem;
+    --notch: 9px;
+    display: inline-block;
+    width: 22rem;
+    max-width: 100%;
+    color: color-mix(in oklab, var(--tk-fg, var(--ground)) 88%, transparent);
+    transform: rotate(2deg);
+    filter: drop-shadow(0.3em 0.3em 0 oklch(0 0 0 / 0.55));
+    transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .np-ticket:hover,
+  .np-ticket:focus-visible {
+    transform: rotate(0deg) translateY(-3px);
+  }
+  .np-ticket .tk-card {
+    --notch-x: var(--stub);
+    /* where the 48px perforation strip starts: centred on the cut */
+    --perf-at: calc(var(--stub) - 24px) 0;
+    position: relative;
+    display: flex;
+    height: var(--stub);
+    background: var(--tk-bg, var(--acid));
+    /* the worn edge, a notch bitten out at each end of the perforation, and
+       the slits (public/ticket-holes.webp) cut right through, so the ground
+       and the card's own shadow show in them. Layers combine bottom up: the
+       slits are taken out of the lower notch, then everything intersected. */
+    -webkit-mask:
+      url("/ticket-edge.webp") 0 0 / 100% 100%,
+      radial-gradient(circle var(--notch) at var(--notch-x) 0, transparent 98%, #000),
+      radial-gradient(circle var(--notch) at var(--notch-x) 100%, transparent 98%, #000),
+      url("/ticket-holes.webp") var(--perf-at) / 48px 100% no-repeat;
+    -webkit-mask-composite: source-in, source-in, source-out;
+    mask:
+      url("/ticket-edge.webp") 0 0 / 100% 100%,
+      radial-gradient(circle var(--notch) at var(--notch-x) 0, transparent 98%, #000),
+      radial-gradient(circle var(--notch) at var(--notch-x) 100%, transparent 98%, #000),
+      url("/ticket-holes.webp") var(--perf-at) / 48px 100% no-repeat;
+    mask-composite: intersect, intersect, subtract;
+  }
+  .np-ticket .tk-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: url("/ticket-wear.webp") 0 0 / 100% 100%;
+  }
+  .np-ticket .tk-stub {
+    position: relative;
+    display: block;
+    width: var(--stub);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  /* the bend along the perforation (public/ticket-perf.webp): the stub
+     turned a little from the light, a soft valley on the cut, ink lifted
+     between the slits and round the notches. Under the wear, over the
+     cover. */
+  .np-ticket .tk-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--notch-x);
+    z-index: 1;
+    width: 48px;
+    margin-left: -24px;
+    pointer-events: none;
+    background: url("/ticket-perf.webp") 0 0 / 100% 100%;
+  }
+  .np-ticket .tk-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1;
+    padding: 0.75rem 0.9rem 0.65rem;
+    /* the title and artist are sized against this column (on-repeat.tsx) */
+    container-type: inline-size;
+  }
+  .np-ticket .tk-title {
+    font-family: var(--font-ticket);
+    line-height: 1;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+  .np-ticket .tk-small {
+    font-family: var(--font-fine);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* stub on the right */
+  .np-ticket.tk-flip {
+    transform: rotate(-2deg);
+  }
+  .np-ticket.tk-flip:hover,
+  .np-ticket.tk-flip:focus-visible {
+    transform: rotate(0deg) translateY(-3px);
+  }
+  .np-ticket.tk-flip .tk-card {
+    --notch-x: calc(100% - var(--stub));
+    --perf-at: right calc(var(--stub) - 24px) top 0;
+    flex-direction: row-reverse;
+  }
+  /* the wear and the bend turned with it, so the fold stays in the body and
+     the stub side of the bend stays the shaded one */
+  .np-ticket.tk-flip .tk-card::after,
+  .np-ticket.tk-flip .tk-card::before {
+    transform: scaleX(-1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .np-ticket {
+      transition: none;
+    }
+  }
+  /* phones narrower than the ticket: shrink the whole thing rather than
+     squeeze the body, so the title keeps the room it was fitted to */
+  @media (max-width: 389px) {
+    .np-ticket {
+      zoom: 0.9;
+    }
+  }
+  @media (max-width: 356px) {
+    .np-ticket {
+      zoom: 0.8;
+    }
+  }
+  @media (max-width: 321px) {
+    .np-ticket {
+      zoom: 0.78;
+    }
+  }
+
   @keyframes sway {
     0%,
     100% {
@@ -454,4 +608,12 @@ html[data-sticker-edit="projects"] [data-sticker-field="projects"],
 html[data-sticker-edit="about"] [data-sticker-field="about"],
 html[data-sticker-edit="contact"] [data-sticker-field="contact"] {
   display: none;
+}
+
+/* liquid-ground.tsx blurs and saturates the ground itself (the same 34px and
+   5 as --frost-blur and --frost-sat above, which it mirrors), so the pane
+   does not have to redo that on a live backdrop every frame. Without webgl2
+   the attribute is never set and the pane blurs the CSS wash as before. */
+html[data-ground] .partition {
+  backdrop-filter: none;
 }

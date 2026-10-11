@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Anton, Archivo, Caveat, Space_Mono } from "next/font/google";
+import { Anton, Archivo, Caveat, Rubik_Mono_One, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { PaperFilters } from "@/components/paper-filters";
 import { EdgeClips } from "@/components/edges";
@@ -36,6 +36,14 @@ const fine = Space_Mono({
   weight: ["400", "700"],
 });
 
+// the on-repeat ticket's title: a wide, blocky mono that reads as a printed
+// stock ticket. Its details use the label face above.
+const ticket = Rubik_Mono_One({
+  variable: "--font-ticket",
+  subsets: ["latin"],
+  weight: "400",
+});
+
 export const metadata: Metadata = {
   title: "Meet Hari!",
   description:
@@ -58,7 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} ${hand.variable} ${fine.variable}`}
+      className={`${display.variable} ${body.variable} ${hand.variable} ${fine.variable} ${ticket.variable}`}
     >
       <body className="xerox">
         {/* the moving ground. Fixed, so it is always one viewport of canvas

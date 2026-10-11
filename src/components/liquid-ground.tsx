@@ -32,6 +32,9 @@ import { useEffect, useRef } from "react";
  * nothing. Without it the ground looks like a broken gradient, not like ink.
  */
 
+// the pane's saturate(), which the output pass applies
+const SATURATION = 5;
+
 const VERT = `#version 300 es
 // fullscreen triangle from gl_VertexID: no attributes, no buffers
 void main() {
@@ -39,10 +42,14 @@ void main() {
   gl_Position = vec4(p * 2.0 - 1.0, 0.0, 1.0);
 }`;
 
-const FRAG = `#version 300 es
+// The field, drawn small. uRes is the viewport in page pixels; the target it
+// draws into is a fraction of that, so everything below is in page pixels
+// whatever the target size is.
+const FRAG_FIELD = `#version 300 es
 precision highp float;
 
 uniform vec2  uRes;
+uniform vec2  uTarget;
 uniform float uTime;
 uniform float uScroll;
 uniform float uGain;
@@ -80,13 +87,14 @@ float fbm(vec2 p) {
 }
 
 void main() {
-  vec2 uv = gl_FragCoord.xy / uRes;
+  vec2 frag = gl_FragCoord.xy / uTarget * uRes;
+  vec2 uv = frag / uRes;
 
   // one noise unit spans about two thirds of the viewport height, and the field
   // slides with the document: the pattern is locked to the page rather than to
   // the screen, which is why the scroll term is a straight pixel translation.
   const float S = 1.5;
-  vec2 p = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y * S;
+  vec2 p = (frag - 0.5 * uRes) / uRes.y * S;
   p.y -= uScroll * S / uRes.y;
 
   // 0.3, not the original 0.035: at that rate the field drifted one noise
@@ -122,9 +130,74 @@ void main() {
   col *= 1.0 - 0.12 * (1.0 - smoothstep(0.62, 0.99, abs(uv.x - 0.5) * 2.0));
   col *= 1.0 - 0.10 * smoothstep(0.55, 1.0, abs(uv.y - 0.5) * 2.0);
 
-  col += (hash(gl_FragCoord.xy * 0.7) - 0.5) * (1.6 / 255.0);
-
   outColor = vec4(col, 1.0);
+}`;
+
+// A separable gaussian over the small field, standing in for the blur(34px)
+// the frosted pane used to apply to a full-size canvas every frame. Mirrored
+// at the edges, as the compositor's backdrop blur is.
+const FRAG_BLUR = `#version 300 es
+precision highp float;
+
+uniform sampler2D uSrc;
+uniform vec2  uDir;     // one texel along the axis being blurred
+uniform float uSigma;   // in texels
+
+out vec4 outColor;
+
+void main() {
+  ivec2 size = textureSize(uSrc, 0);
+  ivec2 here = ivec2(gl_FragCoord.xy);
+  ivec2 step = ivec2(uDir);
+  int reach = int(ceil(uSigma * 3.0));
+  vec4 sum = vec4(0.0);
+  float norm = 0.0;
+  for (int i = -reach; i <= reach; i++) {
+    ivec2 at = here + step * i;
+    float w = exp(-0.5 * float(i * i) / (uSigma * uSigma));
+    norm += w;
+    // past the edge there is nothing to blur. The compositor's backdrop blur
+    // fades out there instead of repeating the edge, so keep the colour
+    // premultiplied and the coverage in alpha, and let the last pass lay it
+    // over the page's own wash
+    if (at.x < 0 || at.y < 0 || at.x >= size.x || at.y >= size.y) continue;
+    sum += texelFetch(uSrc, at, 0) * w;
+  }
+  outColor = sum / norm;
+}`;
+
+// The last step: the blurred field up to the canvas, then what the pane's
+// saturate(5) did to it, then a fraction of a code value of noise so the
+// smooth dark ramp does not band at 8 bits.
+const FRAG_OUT = `#version 300 es
+precision highp float;
+
+uniform sampler2D uSrc;
+uniform vec2  uTarget;
+uniform float uSat;
+
+out vec4 outColor;
+
+float hash(vec2 p) {
+  p = fract(p * vec2(123.34, 456.21));
+  p += dot(p, p + 45.32);
+  return fract(p.x * p.y);
+}
+
+void main() {
+  vec4 t = texture(uSrc, gl_FragCoord.xy / uTarget);
+  vec3 c = t.rgb / max(t.a, 1e-4);
+  // the CSS saturate() matrix, in sRGB values as the filter works
+  vec3 g = vec3(
+    dot(c, vec3(0.213 + 0.787 * uSat, 0.715 - 0.715 * uSat, 0.072 - 0.072 * uSat)),
+    dot(c, vec3(0.213 - 0.213 * uSat, 0.715 + 0.285 * uSat, 0.072 - 0.072 * uSat)),
+    dot(c, vec3(0.213 - 0.213 * uSat, 0.715 - 0.715 * uSat, 0.072 + 0.928 * uSat)));
+  g = clamp(g, 0.0, 1.0);
+  // where the blur faded out at the edge of the viewport, the page's own wash
+  // (the body's .xerox, about this grey) shows through, as it did behind the pane
+  g = mix(vec3(0.22, 0.20, 0.20), g, t.a);
+  g += (hash(gl_FragCoord.xy * 0.7) - 0.5) * (1.6 / 255.0);
+  outColor = vec4(g, 1.0);
 }`;
 
 function compile(gl: WebGL2RenderingContext, type: number, src: string) {
@@ -159,9 +232,10 @@ export function LiquidGround() {
       "position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:-10";
 
     const gl = canvas.getContext("webgl2", {
-      // alpha so the CSS fallback shows through until the first frame lands,
-      // which is what stops a black flash on load
-      alpha: true,
+      // opaque: every pixel is written with alpha 1, and the first frame is
+      // drawn in the same task that attaches the canvas, so nothing can show
+      // black. Opaque also lets the compositor skip blending it.
+      alpha: false,
       antialias: false,
       depth: false,
       stencil: false,
@@ -174,58 +248,144 @@ export function LiquidGround() {
     el.appendChild(canvas);
 
     const vs = compile(gl, gl.VERTEX_SHADER, VERT);
-    const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
-    if (!vs || !fs) return;
+    const fsField = compile(gl, gl.FRAGMENT_SHADER, FRAG_FIELD);
+    const fsBlur = compile(gl, gl.FRAGMENT_SHADER, FRAG_BLUR);
+    const fsOut = compile(gl, gl.FRAGMENT_SHADER, FRAG_OUT);
+    if (!vs || !fsField || !fsBlur || !fsOut) return;
 
-    const prog = gl.createProgram();
-    if (!prog) return;
-    gl.attachShader(prog, vs);
-    gl.attachShader(prog, fs);
-    gl.linkProgram(prog);
-    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
-      console.error(gl.getProgramInfoLog(prog));
-      return;
-    }
-    gl.useProgram(prog);
+    const link = (fs: WebGLShader) => {
+      const prog = gl.createProgram();
+      if (!prog) return null;
+      gl.attachShader(prog, vs);
+      gl.attachShader(prog, fs);
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+        console.error(gl.getProgramInfoLog(prog));
+        return null;
+      }
+      return prog;
+    };
+    const pField = link(fsField);
+    const pBlur = link(fsBlur);
+    const pOut = link(fsOut);
+    if (!pField || !pBlur || !pOut) return;
 
-    const uRes = gl.getUniformLocation(prog, "uRes");
-    const uTime = gl.getUniformLocation(prog, "uTime");
-    const uScroll = gl.getUniformLocation(prog, "uScroll");
-    const uGain = gl.getUniformLocation(prog, "uGain");
+    const u = (prog: WebGLProgram, name: string) => gl.getUniformLocation(prog, name);
+    const uField = {
+      res: u(pField, "uRes"),
+      target: u(pField, "uTarget"),
+      time: u(pField, "uTime"),
+      scroll: u(pField, "uScroll"),
+      gain: u(pField, "uGain"),
+    };
+    const uBlur = { src: u(pBlur, "uSrc"), dir: u(pBlur, "uDir"), sigma: u(pBlur, "uSigma") };
+    const uOut = { src: u(pOut, "uSrc"), target: u(pOut, "uTarget"), sat: u(pOut, "uSat") };
 
-    const coarse = window.matchMedia("(pointer: coarse)").matches;
     const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // dpr is clamped to 1, not 1.5. The ground is now behind a frosted pane, so
-    // its resolution is thrown away twice over: downsampled by the blur, then
-    // composited behind a 62% tint. Rendering it at 1.5x costs 2.25x the
-    // fragments to produce detail nobody can see. Measured with the pane in
-    // place at 1440x900, the blur radius barely moved the frame time — 34px 47ms
-    // against 14px 44ms — which says the cost was never the radius but the
-    // compositor having a live backdrop to re-blend every frame.
-    const dpr = coarse ? 1 : 1;
-    let renderScale = 1;
+    // ## Where the frosted pane's blur went
+    //
+    // The pane over the content used to blur(34px) and saturate(5) this canvas,
+    // and the compositor redid that on a full-viewport backdrop every frame:
+    // measured, it was the largest single cost on the page. The pane's blur
+    // only ever sees this canvas, so it is done here instead, on the field
+    // drawn at a tenth of the size where it costs almost nothing:
+    //
+    //   field (1/10 size) -> gaussian, 34px worth, two passes -> up to the
+    //   canvas with the same saturate(5) -> dither
+    //
+    // The blurred result is smooth, so the canvas itself is half size and the
+    // browser scales it up. The pane keeps its tint and grain and loses only
+    // the backdrop-filter (html[data-ground], globals.css); without webgl2
+    // nothing here runs and the pane still blurs the CSS wash as before.
+    const DOWN = 10; // page px per field texel
+    const SIGMA_PX = 34; // the pane's blur radius, which CSS reads as a sigma
+    const OUT_SCALE = 0.5;
+
+    // 16-bit targets where the browser can render to them, so the blur does
+    // not add banding of its own; 8-bit otherwise
+    let half = !!gl.getExtension("EXT_color_buffer_half_float") || !!gl.getExtension("EXT_color_buffer_float");
+    const makeTarget = () => {
+      const tex = gl.createTexture()!;
+      const fbo = gl.createFramebuffer()!;
+      return { tex, fbo, w: 0, h: 0 };
+    };
+    const A = makeTarget();
+    const B = makeTarget();
+    const size = (t: ReturnType<typeof makeTarget>, w: number, h: number) => {
+      if (t.w === w && t.h === h) return;
+      t.w = w;
+      t.h = h;
+      for (let attempt = 0; attempt < 2; attempt++) {
+        allocate(t, w, h);
+        // a driver that cannot render to 16-bit gets 8-bit instead of a black page
+        if (!half || gl.checkFramebufferStatus(gl.FRAMEBUFFER) === gl.FRAMEBUFFER_COMPLETE) return;
+        half = false;
+      }
+    };
+    const allocate = (t: ReturnType<typeof makeTarget>, w: number, h: number) => {
+      gl.bindTexture(gl.TEXTURE_2D, t.tex);
+      if (half) gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA16F, w, h, 0, gl.RGBA, gl.HALF_FLOAT, null);
+      else gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA8, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, t.fbo);
+      gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, t.tex, 0);
+    };
 
     let raf = 0;
     let disposed = false;
     const start = performance.now();
 
-    const resize = () => {
-      const w = Math.max(1, Math.round(canvas.clientWidth * dpr * renderScale));
-      const h = Math.max(1, Math.round(canvas.clientHeight * dpr * renderScale));
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
-        gl.viewport(0, 0, w, h);
-      }
-    };
-
     const draw = (t: number) => {
-      resize();
-      gl.uniform2f(uRes, canvas.width, canvas.height);
-      gl.uniform1f(uTime, t);
-      gl.uniform1f(uScroll, window.scrollY);
-      gl.uniform1f(uGain, 1);
+      const vw = Math.max(1, canvas.clientWidth);
+      const vh = Math.max(1, canvas.clientHeight);
+      const fw = Math.max(2, Math.ceil(vw / DOWN));
+      const fh = Math.max(2, Math.ceil(vh / DOWN));
+      const ow = Math.max(1, Math.round(vw * OUT_SCALE));
+      const oh = Math.max(1, Math.round(vh * OUT_SCALE));
+      if (canvas.width !== ow || canvas.height !== oh) {
+        canvas.width = ow;
+        canvas.height = oh;
+      }
+      size(A, fw, fh);
+      size(B, fw, fh);
+
+      // 1. the field into A
+      gl.bindFramebuffer(gl.FRAMEBUFFER, A.fbo);
+      gl.viewport(0, 0, fw, fh);
+      gl.useProgram(pField);
+      gl.uniform2f(uField.res, vw, vh);
+      gl.uniform2f(uField.target, fw, fh);
+      gl.uniform1f(uField.time, t);
+      gl.uniform1f(uField.scroll, window.scrollY);
+      gl.uniform1f(uField.gain, 1);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      // 2. across A into B, 3. down B into A
+      gl.useProgram(pBlur);
+      gl.uniform1i(uBlur.src, 0);
+      gl.uniform1f(uBlur.sigma, SIGMA_PX / DOWN);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, A.tex);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, B.fbo);
+      gl.uniform2f(uBlur.dir, 1, 0);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      gl.bindTexture(gl.TEXTURE_2D, B.tex);
+      gl.bindFramebuffer(gl.FRAMEBUFFER, A.fbo);
+      gl.uniform2f(uBlur.dir, 0, 1);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      // 4. A up to the canvas
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, ow, oh);
+      gl.useProgram(pOut);
+      gl.bindTexture(gl.TEXTURE_2D, A.tex);
+      gl.uniform1i(uOut.src, 0);
+      gl.uniform2f(uOut.target, ow, oh);
+      gl.uniform1f(uOut.sat, SATURATION);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
@@ -234,6 +394,13 @@ export function LiquidGround() {
     // A single frame, drawn before the animation loop starts: the page never
     // sits on an empty canvas.
     draw(0);
+    // the pane's own blur is now redundant (globals.css)
+    document.documentElement.dataset.ground = "gl";
+    const release = () => {
+      delete document.documentElement.dataset.ground;
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      canvas.remove();
+    };
 
     if (calm) {
       // no autonomous motion. The scroll-linked shift is not animation, it is
@@ -253,39 +420,32 @@ export function LiquidGround() {
         if (queued) cancelAnimationFrame(queued);
         window.removeEventListener("scroll", onScroll);
         window.removeEventListener("resize", onScroll);
-        gl.getExtension("WEBGL_lose_context")?.loseContext();
-        canvas.remove();
+        release();
       };
     }
 
-    // Frame budget: sample the first 90 frames and drop resolution once if the
-    // mean is over budget. One step, not a loop — a shader that is too slow at
-    // 0.6 is not going to be rescued by 0.36.
-    let frames = 0;
-    let acc = 0;
-    let last = performance.now();
-    let stepped = false;
+    // The liquid drifts about a hundred pixels a second, so at rest 30 frames
+    // a second shows the same picture as 60 and halves what the browser has
+    // to recompose behind the page. While the page scrolls the field is locked
+    // to it, so then every frame is drawn, or the ground would lag the text
+    // it sits behind.
+    let lastDraw = 0;
+    let lastScroll = window.scrollY;
 
     const loop = (now: number) => {
       if (disposed) return;
-      const dt = now - last;
-      last = now;
-      draw(time());
-
-      if (!stepped) {
-        acc += dt;
-        frames++;
-        if (frames >= 90) {
-          stepped = true;
-          if (acc / frames > 22) renderScale = 0.6;
-        }
+      const y = window.scrollY;
+      const moving = y !== lastScroll;
+      lastScroll = y;
+      if (moving || now - lastDraw >= 28) {
+        lastDraw = now;
+        draw(time());
       }
       raf = requestAnimationFrame(loop);
     };
 
     const startLoop = () => {
       if (raf || disposed) return;
-      last = performance.now();
       raf = requestAnimationFrame(loop);
     };
     const stopLoop = () => {
@@ -302,19 +462,13 @@ export function LiquidGround() {
     };
     document.addEventListener("visibilitychange", onVisibility);
 
-    window.addEventListener("resize", resize);
     startLoop();
 
     return () => {
       disposed = true;
       stopLoop();
-      window.removeEventListener("resize", resize);
       document.removeEventListener("visibilitychange", onVisibility);
-      gl.deleteProgram(prog);
-      gl.deleteShader(vs);
-      gl.deleteShader(fs);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
-      canvas.remove();
+      release();
     };
   }, []);
 
