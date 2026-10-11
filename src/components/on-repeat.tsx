@@ -48,10 +48,10 @@ export function OnRepeat({ album, flip = false }: { album: WeekAlbum; flip?: boo
           )}
         </span>
         <span className="tk-body">
-          <span className="tk-small block font-bold">admit one · on repeat</span>
+          <span className="tk-small block truncate font-bold">admit one · on repeat</span>
           <span
             title={album.name}
-            className="tk-title mt-1.5 line-clamp-4"
+            className="tk-title mt-1.5 line-clamp-4 shrink-0"
             style={{ fontSize: fit.size }}
           >
             {title}
@@ -97,6 +97,11 @@ export function OnRepeatSkipped({ why }: { why: string }) {
 // changing the wrap.
 const COLUMN = 179; // px: the body's text column at full width (globals.css)
 const TITLE_ROOM = 50; // px: the height left for the title in the 9rem card
+// Fitted to the exact column, "Hardstone Psycho" had under a pixel to spare
+// and broke mid-word in a Chromium browser on a Mac. Text comes out a little
+// wider or narrower from one browser and system to the next, so names are
+// fitted to 88% of the column.
+const ROOM = COLUMN * 0.88;
 const TITLE_EM = 0.86; // a character plus the title's 0.01em tracking
 const ARTIST_EM = 0.612;
 
@@ -124,8 +129,11 @@ function lineCount(text: string, perLine: number) {
  * hover title.
  */
 function fitTitle(title: string) {
+  const longest = Math.max(...title.split(/\s+/).map((w) => w.length));
   for (let px = 30; px >= 11; px -= 0.25) {
-    const perLine = Math.floor(COLUMN / (TITLE_EM * px));
+    const perLine = Math.floor(ROOM / (TITLE_EM * px));
+    // a word is only broken when even the smallest size cannot hold it whole
+    if (longest > perLine) continue;
     if (lineCount(title, perLine) * px <= TITLE_ROOM) return { size: cqi(px) };
   }
   return { size: cqi(11) };
@@ -133,7 +141,7 @@ function fitTitle(title: string) {
 
 /** one line: 0.8rem, stepping down to 10.5px, then cut with an ellipsis */
 function fitArtist(artist: string) {
-  const px = Math.min(12.8, Math.max(10.5, COLUMN / (ARTIST_EM * artist.length)));
+  const px = Math.min(12.8, Math.max(10.5, ROOM / (ARTIST_EM * artist.length)));
   return cqi(px);
 }
 
