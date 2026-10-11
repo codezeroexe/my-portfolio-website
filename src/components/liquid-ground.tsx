@@ -32,8 +32,9 @@ import { useEffect, useRef } from "react";
  * nothing. Without it the ground looks like a broken gradient, not like ink.
  */
 
-// the pane's saturate(), which the output pass applies
-const SATURATION = 5;
+// the pane's saturate(), which the output pass applies. --frost-sat in the
+// stylesheet is the one place to change it; this is only the fallback.
+const SATURATION_FALLBACK = 5;
 
 const VERT = `#version 300 es
 // fullscreen triangle from gl_VertexID: no attributes, no buffers
@@ -338,6 +339,8 @@ export function LiquidGround() {
     let raf = 0;
     let disposed = false;
     const start = performance.now();
+    const sat = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--frost-sat"));
+    const saturation = Number.isFinite(sat) && sat > 0 ? sat : SATURATION_FALLBACK;
 
     const draw = (t: number) => {
       const vw = Math.max(1, canvas.clientWidth);
@@ -385,7 +388,7 @@ export function LiquidGround() {
       gl.bindTexture(gl.TEXTURE_2D, A.tex);
       gl.uniform1i(uOut.src, 0);
       gl.uniform2f(uOut.target, ow, oh);
-      gl.uniform1f(uOut.sat, SATURATION);
+      gl.uniform1f(uOut.sat, saturation);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
