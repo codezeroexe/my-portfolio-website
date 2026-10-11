@@ -252,6 +252,13 @@
     transform: rotate(var(--tilt, 0deg));
   }
 
+/* merged clusters (scripts/merge-stickers.mjs) have every member's shadow
+   baked into the image; the filter above would draw a second one around the
+   whole cluster */
+.sticker[src^="/stickers/merged/"] {
+    filter: none;
+  }
+
   .tape {
     background: linear-gradient(
       100deg,

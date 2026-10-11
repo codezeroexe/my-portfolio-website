@@ -150,8 +150,8 @@ export default async function Home() {
             hero bio no longer drifts everything below it. */}
         <section id="hero" className="relative py-10 md:py-16">
           <div data-editor-host="hero" />
-          <StickerField section="hero" stickers={desktop.hero} className="hidden lg:block" />
-          <StickerField section="hero" stickers={mobile.hero} className="lg:hidden" />
+          <StickerField section="hero" layout="desktop" stickers={desktop.hero} className="hidden lg:block" />
+          <StickerField section="hero" layout="mobile" stickers={mobile.hero} className="lg:hidden" />
           <div className="relative">
             <h1 className="scream blank relative text-[30vw] leading-[0.72] sm:text-[24vw] md:text-[19vw] lg:text-[17rem]">
               HARI
@@ -248,8 +248,8 @@ export default async function Home() {
         <Settle>
           <section id="about" className="relative py-12">
             <div data-editor-host="about" />
-            <StickerField section="about" stickers={desktop.about} className="hidden lg:block" />
-            <StickerField section="about" stickers={mobile.about} className="lg:hidden" />
+            <StickerField section="about" layout="desktop" stickers={desktop.about} className="hidden lg:block" />
+            <StickerField section="about" layout="mobile" stickers={mobile.about} className="lg:hidden" />
             <p className="fine text-ash">page 02 — how i work</p>
             <h2 className="scream mt-3 text-5xl leading-[0.82] sm:text-7xl">
               THE BORING
@@ -286,8 +286,8 @@ export default async function Home() {
         <Settle>
           <section id="contact" className="relative py-12">
             <div data-editor-host="contact" />
-            <StickerField section="contact" stickers={desktop.contact} className="hidden lg:block" />
-            <StickerField section="contact" stickers={mobile.contact} className="lg:hidden" />
+            <StickerField section="contact" layout="desktop" stickers={desktop.contact} className="hidden lg:block" />
+            <StickerField section="contact" layout="mobile" stickers={mobile.contact} className="lg:hidden" />
             <p className="fine text-ash">page 03 — talk to me</p>
             <h2 className="scream mt-3 text-6xl leading-[0.82] sm:text-8xl">
               SAY <span className="blank">HI</span>
