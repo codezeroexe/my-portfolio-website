@@ -14,6 +14,7 @@ import {
 import { Settle } from "@/components/settle";
 import { LogoSticker, LOGOS } from "@/components/logo-sticker";
 import { OnRepeat, OnRepeatSkipped } from "@/components/on-repeat";
+import { CopyEmail } from "@/components/copy-email";
 import { weekAlbum } from "@/lib/lastfm";
 
 export const revalidate = 3600;
@@ -323,17 +324,7 @@ export default async function Home() {
             </h2>
 
             <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-              <a
-                href="mailto:srhxri06@gmail.com"
-                className="group inline-block border-4 border-bone px-6 py-5 transition-transform hover:-translate-y-1"
-              >
-                <span className="scream block text-2xl text-bone sm:text-3xl">
-                  srhxri06@gmail.com
-                </span>
-                <span className="fine mt-2 block text-ash group-hover:text-bone">
-                  write to me →
-                </span>
-              </a>
+              <CopyEmail email="srhxri06@gmail.com" />
 
               <div>
                 <ul className="flex flex-wrap gap-x-6 gap-y-3">

@@ -5,6 +5,9 @@ import { PaperFilters } from "@/components/paper-filters";
 import { EdgeClips } from "@/components/edges";
 import { LiquidGround } from "@/components/liquid-ground";
 import { ViewportBadge } from "@/components/viewport-badge";
+import { ScrollTape } from "@/components/scroll-tape";
+import { StickerPeel } from "@/components/sticker-peel";
+import { Avalanche } from "@/components/avalanche";
 
 const display = Anton({
   variable: "--font-display",
@@ -84,6 +87,10 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
+        <ScrollTape />
+        <StickerPeel />
+        {/* type "hari" anywhere */}
+        <Avalanche />
         <ViewportBadge />
       </body>
     </html>

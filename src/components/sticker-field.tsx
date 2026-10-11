@@ -1,4 +1,26 @@
-import { Sticker } from "@/components/edges";
+import { Sticker, type Peel } from "@/components/edges";
+
+/**
+ * Stickers whose corner has come unstuck: the corner, then how far it is
+ * lifted at rest and when the hand touches it, as a fraction of the sticker's
+ * width. Picked from each image's outline so the fold catches the sticker
+ * itself, not the empty corner of its box (round ones need a deeper fold).
+ */
+const PEELS: Record<string, [Peel["corner"], number, number]> = {
+  "/stickers/parental-advisory.webp": ["tl", 0.115, 0.255],
+  "/stickers/acdc.webp": ["bl", 0.13, 0.235],
+  "/stickers/call-me.webp": ["bl", 0.165, 0.24],
+  "/stickers/new-york.webp": ["tl", 0.335, 0.43],
+  "/stickers/stussy.webp": ["tr", 0.3, 0.395],
+  "/stickers/island.webp": ["tr", 0.33, 0.42],
+  "/stickers/bam-bam.webp": ["br", 0.21, 0.33],
+  "/stickers/avengers-assemble.webp": ["tr", 0.14, 0.22],
+};
+
+const peelFor = (src: string, size: number): Peel | undefined => {
+  const p = PEELS[src];
+  return p && { corner: p[0], rest: p[1] * size, lift: p[2] * size };
+};
 
 /** the four sections a sticker can belong to; x/y are percentages of it */
 export type Section = "hero" | "projects" | "about" | "contact";
@@ -95,7 +117,7 @@ export function StickerField({
                 style={{ left: `${s.x}%`, top: `${s.y}%` }}
                 className="absolute -translate-x-1/2 -translate-y-1/2"
               >
-                <Sticker src={s.src} alt="" size={s.size} tilt={s.tilt} />
+                <Sticker src={s.src} alt="" size={s.size} tilt={s.tilt} peel={peelFor(s.src, s.size)} />
               </div>
             ) : null,
           )}

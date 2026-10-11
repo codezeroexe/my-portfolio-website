@@ -617,3 +617,185 @@ html[data-sticker-edit="contact"] [data-sticker-field="contact"] {
 html[data-ground] .partition {
   backdrop-filter: none;
 }
+
+/* scroll-tape.tsx: masking tape down the right edge in place of the scrollbar
+   (the native one is hidden while it runs), as long as the page is read. --read is how far down the page is, 0 to 1; the strip shows through a
+   window that grows from a short stub, so there is something to grow at the
+   top of the page. The strip itself is laid out flat and turned upright, so
+   the torn-edge filter tears its long sides as it does the other tape. */
+.scroll-tape {
+  --tape-t: 28px; /* how wide the tape is */
+  --tape-h: calc(44px + var(--read, 0) * (100% - 44px));
+  position: fixed;
+  top: -6px;
+  bottom: -6px;
+  right: -4px;
+  width: var(--tape-t);
+  z-index: 60;
+  pointer-events: none;
+  transform: rotate(-0.25deg);
+  transform-origin: 50% 0;
+}
+
+.scroll-tape-clip {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: var(--tape-h);
+  overflow: hidden;
+}
+
+.scroll-tape-body,
+.scroll-tape-end {
+  background: linear-gradient(
+    180deg,
+    oklch(0.9 0.05 90 / 0.92),
+    oklch(0.83 0.07 85 / 0.88) 55%,
+    oklch(0.87 0.05 92 / 0.92)
+  );
+  box-shadow: 0 2px 4px oklch(0 0 0 / 0.45);
+}
+
+.scroll-tape-body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100vh + 12px);
+  height: var(--tape-t);
+  transform-origin: 0 0;
+  transform: translateX(var(--tape-t)) rotate(90deg);
+  filter: url(#tape-torn);
+}
+
+/* the torn end, riding the edge of the window */
+.scroll-tape-end {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--tape-h);
+  height: 14px;
+  box-shadow: none;
+  clip-path: polygon(0 0, 0 55%, 22% 100%, 38% 62%, 56% 100%, 74% 58%, 100% 92%, 100% 0);
+}
+
+/* with a mouse the tape is also the handle: a wider invisible strip to grab */
+@media (pointer: fine) {
+  .scroll-tape {
+    pointer-events: auto;
+    cursor: grab;
+    touch-action: none;
+  }
+  .scroll-tape::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 0 -9px;
+  }
+  .scroll-tape[data-drag] {
+    cursor: grabbing;
+  }
+}
+
+html[data-tape] {
+  scrollbar-width: none;
+}
+html[data-tape]::-webkit-scrollbar {
+  display: none;
+}
+
+@media print {
+  .scroll-tape {
+    display: none;
+  }
+}
+
+/* A sticker with a corner come unstuck (edges.tsx Sticker `peel`).
+   --peel is how far in from the corner the fold sits, along each edge. The
+   face loses that corner; the flap is the same outline (the image as a mask)
+   reflected across the fold, painted as the sticker's paper back, with its
+   own small shadow. Clip paths and the mask work in the flap's own space, so
+   the reflection is one transform about a point on the fold. */
+@property --peel {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+.peel {
+  position: relative;
+  display: block;
+  --peel: var(--peel-rest);
+  transition: --peel 0.45s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+.peel[data-lifted] {
+  --peel: var(--peel-lift);
+  transition-duration: 0.3s;
+}
+
+.peel-face {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+}
+
+.peel-fold {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  filter: drop-shadow(1px 2px 1.5px oklch(0 0 0 / 0.45));
+}
+
+.peel-flap {
+  position: absolute;
+  inset: 0;
+  mask-size: 100% 100%;
+  -webkit-mask-size: 100% 100%;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+}
+
+.peel[data-peel="br"] .peel-face {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--peel)), calc(100% - var(--peel)) 100%, 0 100%);
+}
+.peel[data-peel="br"] .peel-flap {
+  clip-path: polygon(calc(100% - var(--peel)) 100%, 100% calc(100% - var(--peel)), 100% 100%);
+  transform-origin: calc(100% - var(--peel)) 100%;
+  transform: matrix(0, -1, -1, 0, 0, 0);
+  background: radial-gradient(calc(var(--peel) * 0.75 + 1px) at 100% 100%, #f7f4ec, #ddd7ca 60%, #bdb6a7);
+}
+
+.peel[data-peel="tl"] .peel-face {
+  clip-path: polygon(var(--peel) 0, 100% 0, 100% 100%, 0 100%, 0 var(--peel));
+}
+.peel[data-peel="tl"] .peel-flap {
+  clip-path: polygon(0 0, var(--peel) 0, 0 var(--peel));
+  transform-origin: var(--peel) 0;
+  transform: matrix(0, -1, -1, 0, 0, 0);
+  background: radial-gradient(calc(var(--peel) * 0.75 + 1px) at 0 0, #f7f4ec, #ddd7ca 60%, #bdb6a7);
+}
+
+.peel[data-peel="tr"] .peel-face {
+  clip-path: polygon(0 0, calc(100% - var(--peel)) 0, 100% var(--peel), 100% 100%, 0 100%);
+}
+.peel[data-peel="tr"] .peel-flap {
+  clip-path: polygon(calc(100% - var(--peel)) 0, 100% 0, 100% var(--peel));
+  transform-origin: calc(100% - var(--peel)) 0;
+  transform: matrix(0, 1, 1, 0, 0, 0);
+  background: radial-gradient(calc(var(--peel) * 0.75 + 1px) at 100% 0, #f7f4ec, #ddd7ca 60%, #bdb6a7);
+}
+
+.peel[data-peel="bl"] .peel-face {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, var(--peel) 100%, 0 calc(100% - var(--peel)));
+}
+.peel[data-peel="bl"] .peel-flap {
+  clip-path: polygon(0 calc(100% - var(--peel)), var(--peel) 100%, 0 100%);
+  transform-origin: var(--peel) 100%;
+  transform: matrix(0, 1, 1, 0, 0, 0);
+  background: radial-gradient(calc(var(--peel) * 0.75 + 1px) at 0 100%, #f7f4ec, #ddd7ca 60%, #bdb6a7);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .peel {
+    transition: none;
+  }
+}
