@@ -230,6 +230,7 @@
      crookedness comes from --tilt per divider. */
   .caution {
     height: 30px;
+    position: relative;
     margin: 0 -2%;
     transform: rotate(var(--tilt, -0.6deg));
     background:
@@ -244,6 +245,48 @@
       0.6% 0%, 99.2% 6%, 99.8% 24%, 99% 41%, 99.7% 62%, 98.9% 84%, 99.4% 100%,
       0.9% 94%, 0.2% 76%, 1% 58%, 0.1% 38%, 0.8% 18%
     );
+  }
+  .caution--diag { /* plain stripes: the base */ }
+
+  /* lettered tape: yellow band between two striped rims */
+  .caution--warn,
+  .caution--stop {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    overflow: hidden;
+    font-family: var(--font-ticket);
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    color: oklch(0.16 0.01 60);
+    --rim: repeating-linear-gradient(-45deg, oklch(0.16 0.01 60) 0 7px, transparent 7px 14px);
+    background:
+      var(--rim) top / 100% 7px no-repeat,
+      var(--rim) bottom / 100% 7px no-repeat,
+      linear-gradient(180deg, oklch(1 0 0 / 0.2), transparent 30%, transparent 70%, oklch(0 0 0 / 0.25)),
+      var(--acid);
+  }
+  .caution--warn span,
+  .caution--stop span {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2em;
+    white-space: nowrap;
+  }
+  .caution--warn i {
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* chevron tape */
+  .caution--chev {
+    background:
+      linear-gradient(180deg, oklch(1 0 0 / 0.22), transparent 28%, transparent 72%, oklch(0 0 0 / 0.28)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='30'%3E%3Cpolygon points='0,0 18,0 36,15 18,30 0,30 18,15' fill='%23201c18'/%3E%3C/svg%3E") 0 0 / 36px 30px repeat-x,
+      var(--acid);
   }
 
 /* die-cut sticker: hard shadow. The tilt is applied at load from --tilt;
@@ -816,19 +859,33 @@ html[data-tape]::-webkit-scrollbar {
   filter: drop-shadow(0 3px 0 oklch(0 0 0 / 0.55)) drop-shadow(0 10px 14px oklch(0 0 0 / 0.45));
 }
 .receipt {
-  --zig: 14px;
-  padding: 22px 22px 24px;
+  position: relative;
+  padding: 26px 24px 28px;
   background: oklch(0.955 0.014 90);
-  color: oklch(0.25 0.01 60);
+  color: oklch(0.2 0.012 60);
   font-size: 12px;
   line-height: 1.5;
   letter-spacing: 0.06em;
-  -webkit-mask:
-    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--zig) 51% repeat-x,
-    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--zig) 51% repeat-x;
-  mask:
-    conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / var(--zig) 51% repeat-x,
-    conic-gradient(from 135deg at top, #0000, #000 1deg 89deg, #0000 90deg) top / var(--zig) 51% repeat-x;
+  /* the torn, wavy outline is baked (scripts/weather-receipt.py) */
+  -webkit-mask: url("/receipt/phone-shape.webp") 0 0 / 100% 100% no-repeat;
+  mask: url("/receipt/phone-shape.webp") 0 0 / 100% 100% no-repeat;
+}
+/* the wear itself: stains, creases, crumple, rubbed-off ink, over the print */
+.receipt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url("/receipt/phone-wear.webp") 0 0 / 100% 100% no-repeat;
+}
+@media (min-width: 768px) {
+  .receipt {
+    -webkit-mask-image: url("/receipt/desk-shape.webp");
+    mask-image: url("/receipt/desk-shape.webp");
+  }
+  .receipt::after {
+    background-image: url("/receipt/desk-wear.webp");
+  }
 }
 .receipt-rule {
   margin: 9px 0;

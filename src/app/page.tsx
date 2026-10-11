@@ -13,6 +13,7 @@ import {
 } from "@/components/sticker-tools";
 import { Settle } from "@/components/settle";
 import { Receipt } from "@/components/receipt";
+import { CautionTape } from "@/components/caution-tape";
 import { OnRepeat, OnRepeatSkipped } from "@/components/on-repeat";
 import { CopyEmail } from "@/components/copy-email";
 import { weekAlbum } from "@/lib/lastfm";
@@ -216,14 +217,14 @@ export default async function Home() {
           </div>
         )}
 
-        <div className="caution" style={{ "--tilt": "-0.7deg" } as React.CSSProperties} aria-hidden />
+        <CautionTape kind="warn" tilt={-0.7} />
 
         {/* ── work ──────────────────────────────────────────────────── */}
         <Settle>
           <ProjectSheet repos={repos} desktop={desktop} mobile={mobile} />
         </Settle>
 
-        <div className="caution" style={{ "--tilt": "0.5deg" } as React.CSSProperties} aria-hidden />
+        <CautionTape kind="chev" tilt={0.5} />
 
         {/* ── method ────────────────────────────────────────────────── */}
         <Settle>
@@ -262,7 +263,7 @@ export default async function Home() {
           </section>
         </Settle>
 
-        <div className="caution" style={{ "--tilt": "-0.4deg" } as React.CSSProperties} aria-hidden />
+        <CautionTape kind="stop" tilt={-0.4} />
 
         {/* ── contact ───────────────────────────────────────────────── */}
         <Settle>

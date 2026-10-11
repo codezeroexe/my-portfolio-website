@@ -15,8 +15,28 @@ const FACTS: [string, string][] = [
   ["also", "digital art"],
 ];
 
-// code 39 would be honest; this is just irregular bars seeded from the name
-const BARS = [2, 1, 3, 1, 1, 2, 1, 3, 2, 1, 1, 2, 3, 1, 2, 1, 1, 3, 1, 2, 2, 1, 3, 1, 1, 2, 1, 1, 3, 2, 1, 2, 1, 3, 1, 1, 2, 3, 1, 2];
+// EAN-13, the shop kind: 95 modules, three tall guard bars, digits underneath.
+const L = ["0001101", "0011001", "0010011", "0111101", "0100011", "0110001", "0101111", "0111011", "0110111", "0001011"];
+const G = ["0100111", "0110011", "0011011", "0100001", "0011101", "0111001", "0000101", "0010001", "0001001", "0010111"];
+const R = ["1110010", "1100110", "1101100", "1000010", "1011100", "1001110", "1010000", "1000100", "1001000", "1110100"];
+const PARITY = ["LLLLLL", "LLGLGG", "LLGGLG", "LLGGGL", "LGLLGG", "LGGLLG", "LGGGLL", "LGLGLG", "LGLGGL", "LGGLGL"];
+
+function ean13(first12: string) {
+  const d = [...first12].map(Number);
+  const sum = d.reduce((t, n, i) => t + n * (i % 2 ? 3 : 1), 0);
+  const digits = [...d, (10 - (sum % 10)) % 10];
+  const par = PARITY[digits[0]];
+  let bits = "101";
+  for (let i = 0; i < 6; i++) bits += (par[i] === "L" ? L : G)[digits[i + 1]];
+  bits += "01010";
+  for (let i = 7; i < 13; i++) bits += R[digits[i]];
+  bits += "101";
+  return { digits, bits };
+}
+
+const CODE = ean13("200101000001");
+// guard bars (start, middle, end) run lower than the rest
+const GUARD = (i: number) => i < 3 || (i >= 45 && i < 50) || i >= 92;
 
 function Line({ k, v }: { k: string; v: string }) {
   return (
@@ -29,13 +49,6 @@ function Line({ k, v }: { k: string; v: string }) {
 }
 
 export function Receipt({ year }: { year: number }) {
-  let x = 0;
-  const bars = BARS.map((w, i) => {
-    const r = i % 2 === 0 ? <rect key={i} x={x} y={0} width={w} height={24} /> : null;
-    x += w;
-    return r;
-  });
-
   return (
     <div className="receipt-wrap">
       <div className="receipt fine">
@@ -68,15 +81,28 @@ export function Receipt({ year }: { year: number }) {
 
         <hr className="receipt-rule" />
 
-        <div className="flex items-baseline justify-between text-[15px] font-bold">
-          <span>status</span>
-          <span>open to work</span>
-        </div>
+        <div className="md:flex md:flex-row-reverse md:items-center md:justify-between md:gap-6">
+          <div className="md:flex-1">
+            <div className="flex items-baseline justify-between text-[15px] font-bold">
+              <span>status</span>
+              <span>open to work</span>
+            </div>
+            <p className="mt-2 text-center md:text-left">thank you · come again</p>
+          </div>
 
-        <svg className="mx-auto mt-3 h-[24px] w-[70%]" viewBox={`0 0 ${x} 24`} preserveAspectRatio="none" aria-hidden>
-          <g fill="currentColor">{bars}</g>
-        </svg>
-        <p className="mt-2 text-center">thank you · come again</p>
+          <svg className="mx-auto mt-3 block h-[50px] w-[168px] shrink-0 md:mx-0 md:mt-0" viewBox="0 0 113 34" aria-hidden>
+            <g fill="currentColor">
+              {[...CODE.bits].map((bit, i) =>
+                bit === "1" ? <rect key={i} x={9 + i} y={0} width={1} height={GUARD(i) ? 29 : 25} /> : null,
+              )}
+            </g>
+            <g fill="currentColor" fontFamily="var(--font-fine)" fontSize="6" textAnchor="middle">
+              <text x="4" y="33">{CODE.digits[0]}</text>
+              <text x="33" y="33" textLength="38" lengthAdjust="spacing">{CODE.digits.slice(1, 7).join("")}</text>
+              <text x="80" y="33" textLength="38" lengthAdjust="spacing">{CODE.digits.slice(7).join("")}</text>
+            </g>
+          </svg>
+        </div>
       </div>
     </div>
   );
