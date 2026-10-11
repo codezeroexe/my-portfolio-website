@@ -6,6 +6,7 @@ import { EdgeClips } from "@/components/edges";
 import { LiquidGround } from "@/components/liquid-ground";
 import { ViewportBadge } from "@/components/viewport-badge";
 import { CursorPicker } from "@/components/cursor-picker";
+import { CursorFx } from "@/components/cursor-fx";
 import { DEFAULT_CURSOR } from "@/lib/cursor";
 
 const display = Anton({
@@ -68,7 +69,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-cursor={DEFAULT_CURSOR}
+      data-cursor={DEFAULT_CURSOR.hand}
+      data-cursor-text={DEFAULT_CURSOR.text}
+      data-cursor-label={DEFAULT_CURSOR.label ? "on" : "off"}
+      data-cursor-swing={DEFAULT_CURSOR.swing ? "on" : "off"}
       className={`${display.variable} ${body.variable} ${hand.variable} ${fine.variable} ${ticket.variable}`}
     >
       <body className="xerox">
@@ -87,8 +91,10 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
-        {/* the cursor is CSS on html[data-cursor]; previews and development
-            get a picker to try the other shapes */}
+        {/* the cursor is CSS on html[data-cursor]; CursorFx adds the label
+            and the swing when they are on. Previews and development get a
+            picker to try the other hands. */}
+        <CursorFx />
         {process.env.VERCEL_ENV !== "production" && <CursorPicker />}
         <ViewportBadge />
       </body>

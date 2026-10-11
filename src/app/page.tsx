@@ -325,6 +325,7 @@ export default async function Home() {
             <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
               <a
                 href="mailto:srhxri06@gmail.com"
+                data-cursor-label="open mail"
                 className="group inline-block border-4 border-bone px-6 py-5 transition-transform hover:-translate-y-1"
               >
                 <span className="scream block text-2xl text-bone sm:text-3xl">
@@ -338,16 +339,17 @@ export default async function Home() {
               <div>
                 <ul className="flex flex-wrap gap-x-6 gap-y-3">
                   {[
-                    ["GitHub", "https://github.com/codezeroexe"],
-                    ["LinkedIn", "https://linkedin.com/in/srhari06/"],
-                    ["Instagram", "https://www.instagram.com/code.zxro/"],
-                    ["X", "https://x.com/codezeroexe"],
-                  ].map(([label, href]) => (
+                    ["GitHub", "https://github.com/codezeroexe", "follow"],
+                    ["LinkedIn", "https://linkedin.com/in/srhari06/", "connect"],
+                    ["Instagram", "https://www.instagram.com/code.zxro/", "follow"],
+                    ["X", "https://x.com/codezeroexe", "follow"],
+                  ].map(([label, href, say]) => (
                     <li key={label}>
                       <a
                         href={href}
                         target="_blank"
                         rel="noopener noreferrer"
+                        data-cursor-label={say}
                         className="fine border-b-2 border-transparent pb-1 transition-colors hover:border-bone hover:text-bone"
                       >
                         {label} ↗
