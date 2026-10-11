@@ -117,8 +117,8 @@
         "src": "/stickers/acdc.webp",
         "size": 164,
         "tilt": -8.4,
-        "x": 61,
-        "y": 88.7
+        "x": 60,
+        "y": 94.5
       }
     ],
     "projects": [
@@ -414,22 +414,22 @@
         "src": "/stickers/spidey.webp",
         "size": 68,
         "tilt": 16.9,
-        "x": 90.3,
-        "y": 71.2
+        "x": 92,
+        "y": 84.5
       },
       {
         "src": "/stickers/flash.webp",
         "size": 50,
         "tilt": 16.9,
         "x": 100.3,
-        "y": 68.1
+        "y": 80.5
       },
       {
         "src": "/stickers/sun.webp",
         "size": 88,
         "tilt": 16.9,
-        "x": 40.2,
-        "y": 78.3
+        "x": 12,
+        "y": 98.5
       },
       {
         "src": "/stickers/new-york.webp",
@@ -442,8 +442,8 @@
         "src": "/stickers/acdc.webp",
         "size": 88,
         "tilt": -9.6,
-        "x": 38.5,
-        "y": 65.3
+        "x": 14,
+        "y": 61.2
       }
     ],
     "projects": [

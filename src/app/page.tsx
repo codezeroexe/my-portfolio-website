@@ -12,7 +12,8 @@ import {
   type TrayAssets,
 } from "@/components/sticker-tools";
 import { Settle } from "@/components/settle";
-import { LogoSticker, LOGOS } from "@/components/logo-sticker";
+import { Receipt } from "@/components/receipt";
+import { CautionTape } from "@/components/caution-tape";
 import { OnRepeat, OnRepeatSkipped } from "@/components/on-repeat";
 import { CopyEmail } from "@/components/copy-email";
 import { weekAlbum } from "@/lib/lastfm";
@@ -71,17 +72,6 @@ function buildTray(): TrayAssets {
 }
 
 const stickerAssets = buildTray();
-
-// the about strip: one ramp colour per fact, round-robin like the repo panels
-const SLABS = [
-  "var(--slab-red)",
-  "var(--slab-amber)",
-  "var(--slab-green)",
-  "var(--slab-cyan)",
-  "var(--slab-blue)",
-  "var(--slab-violet)",
-];
-const SLAB_TILTS = [-1.4, 1.1, -0.8, 1.6, -1.1, 0.9];
 
 // only the two fields worth taking from the API. Topics are hand-written
 // because nothing on the account has any, and the panels link out by slug.
@@ -207,45 +197,8 @@ export default async function Home() {
                 unnecessarily invested in something I like.
               </p>
 
-              <dl className="mt-8 grid grid-cols-2 gap-x-5 gap-y-5 sm:grid-cols-3">
-                {[
-                  ["based", "Kerala → Pune"],
-                  ["studying", "AI, Symbiosis"],
-                  ["builds", "Python · React"],
-                  ["ships", "Next.js · WebGL"],
-                  ["also", "digital art"],
-                  ["status", "open to work"],
-                ].map(([k, v], i) => (
-                  <div
-                    key={k}
-                    className="slab slab-box"
-                    style={{
-                      ["--slab-bg" as string]: SLABS[i % SLABS.length],
-                      ["--slab-tilt" as string]: `${SLAB_TILTS[i % SLAB_TILTS.length]}deg`,
-                    }}
-                  >
-                    <dt className="fine">{k}</dt>
-                    <dd className="zine mt-0.5 text-sm">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-
-              {/* the real marks, die-cut, dropped straight onto the poster */}
-              <div className="mt-9 flex flex-wrap items-start gap-x-4 gap-y-5">
-                {LOGOS.map((l, i) => (
-                  <span
-                    key={l.src}
-                    className="flex w-[74px] flex-col items-center gap-1.5"
-                  >
-                    <LogoSticker
-                      src={l.src}
-                      label={l.label}
-                      size={44}
-                      tilt={[-4, 3, -2, 4, -3, 2, -4, 2][i % 8]}
-                    />
-                    <span className="fine text-ash">{l.label}</span>
-                  </span>
-                ))}
+              <div className="mt-8 md:mt-[0.85rem]">
+                <Receipt year={new Date().getFullYear()} />
               </div>
             </div>
           </div>
@@ -264,14 +217,14 @@ export default async function Home() {
           </div>
         )}
 
-        <div className="tear-line" aria-hidden />
+        <CautionTape kind="warn" tilt={-0.7} />
 
         {/* ── work ──────────────────────────────────────────────────── */}
         <Settle>
           <ProjectSheet repos={repos} desktop={desktop} mobile={mobile} />
         </Settle>
 
-        <div className="tear-line" aria-hidden />
+        <CautionTape kind="chev" tilt={0.5} />
 
         {/* ── method ────────────────────────────────────────────────── */}
         <Settle>
@@ -310,7 +263,7 @@ export default async function Home() {
           </section>
         </Settle>
 
-        <div className="tear-line" aria-hidden />
+        <CautionTape kind="stop" tilt={-0.4} />
 
         {/* ── contact ───────────────────────────────────────────────── */}
         <Settle>

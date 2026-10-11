@@ -225,17 +225,68 @@
     color: var(--accent);
   }
 
-  /* torn rule between sections, hand-drawn rather than ruled */
-  .tear-line {
-    height: 4px;
-    background: var(--bone);
-    opacity: 0.8;
+  /* Section divider: a strip of caution tape stuck across the page.
+     Static (no filter, no animation); the torn ends are a clip-path and the
+     crookedness comes from --tilt per divider. */
+  .caution {
+    height: 30px;
+    position: relative;
+    margin: 0 -2%;
+    transform: rotate(var(--tilt, -0.6deg));
+    background:
+      linear-gradient(180deg, oklch(1 0 0 / 0.22), transparent 28%, transparent 72%, oklch(0 0 0 / 0.28)),
+      repeating-linear-gradient(
+        -45deg,
+        var(--acid) 0 17px,
+        oklch(0.16 0.01 60) 17px 34px
+      );
+    opacity: 0.94;
     clip-path: polygon(
-      0% 34%, 4% 8%, 11% 46%, 17% 14%, 24% 52%, 31% 20%, 38% 58%, 45% 16%,
-      52% 50%, 59% 22%, 66% 60%, 73% 18%, 80% 54%, 87% 24%, 94% 56%, 100% 30%,
-      100% 74%, 94% 96%, 87% 66%, 80% 92%, 73% 62%, 66% 98%, 59% 68%,
-      52% 94%, 45% 66%, 38% 96%, 31% 72%, 24% 98%, 17% 70%, 11% 94%, 4% 62%, 0% 88%
+      0.6% 0%, 99.2% 6%, 99.8% 24%, 99% 41%, 99.7% 62%, 98.9% 84%, 99.4% 100%,
+      0.9% 94%, 0.2% 76%, 1% 58%, 0.1% 38%, 0.8% 18%
     );
+  }
+  .caution--diag { /* plain stripes: the base */ }
+
+  /* lettered tape: yellow band between two striped rims */
+  .caution--warn,
+  .caution--stop {
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    overflow: hidden;
+    font-family: var(--font-ticket);
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    color: oklch(0.16 0.01 60);
+    --rim: repeating-linear-gradient(-45deg, oklch(0.16 0.01 60) 0 7px, transparent 7px 14px);
+    background:
+      var(--rim) top / 100% 7px no-repeat,
+      var(--rim) bottom / 100% 7px no-repeat,
+      linear-gradient(180deg, oklch(1 0 0 / 0.2), transparent 30%, transparent 70%, oklch(0 0 0 / 0.25)),
+      var(--acid);
+  }
+  .caution--warn span,
+  .caution--stop span {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.2em;
+    white-space: nowrap;
+  }
+  .caution--warn i {
+    width: 0.4em;
+    height: 0.4em;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* chevron tape */
+  .caution--chev {
+    background:
+      linear-gradient(180deg, oklch(1 0 0 / 0.22), transparent 28%, transparent 72%, oklch(0 0 0 / 0.28)),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='30'%3E%3Cpolygon points='0,0 18,0 36,15 18,30 0,30 18,15' fill='%23201c18'/%3E%3C/svg%3E") 0 0 / 36px 30px repeat-x,
+      var(--acid);
   }
 
 /* die-cut sticker: hard shadow. The tilt is applied at load from --tilt;
@@ -798,4 +849,63 @@ html[data-tape]::-webkit-scrollbar {
   .peel {
     transition: none;
   }
+}
+
+/* till-receipt "about" block. The wrapper carries the shadow because a mask
+   on .receipt would clip its own drop-shadow. */
+.receipt-wrap {
+  max-width: 24rem;
+  transform: rotate(1.1deg);
+  filter: drop-shadow(0 3px 0 oklch(0 0 0 / 0.55)) drop-shadow(0 10px 14px oklch(0 0 0 / 0.45));
+}
+.receipt {
+  position: relative;
+  padding: 26px 24px 28px;
+  background: oklch(0.955 0.014 90);
+  color: oklch(0.2 0.012 60);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  /* the torn, wavy outline is baked (scripts/weather-receipt.py) */
+  -webkit-mask: url("/receipt/phone-shape.webp") 0 0 / 100% 100% no-repeat;
+  mask: url("/receipt/phone-shape.webp") 0 0 / 100% 100% no-repeat;
+}
+/* the wear itself: stains, creases, crumple, rubbed-off ink, over the print */
+.receipt::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: url("/receipt/phone-wear.webp") 0 0 / 100% 100% no-repeat;
+}
+@media (min-width: 768px) {
+  .receipt {
+    -webkit-mask-image: url("/receipt/desk-shape.webp");
+    mask-image: url("/receipt/desk-shape.webp");
+  }
+  .receipt::after {
+    background-image: url("/receipt/desk-wear.webp");
+  }
+}
+.receipt-rule {
+  margin: 9px 0;
+  border: 0;
+  border-top: 1.5px dashed currentColor;
+  opacity: 0.55;
+}
+.receipt-dots {
+  flex: 1 1 auto;
+  min-width: 8px;
+  border-bottom: 1.5px dotted currentColor;
+  opacity: 0.5;
+  transform: translateY(-3px);
+}
+.receipt-ink {
+  opacity: 0.95;
+}
+@media print {
+  .receipt-wrap { filter: none; }
+}
+@media (min-width: 768px) {
+  .receipt-wrap { max-width: 38rem; }
 }
