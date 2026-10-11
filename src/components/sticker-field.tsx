@@ -24,6 +24,14 @@ export type FieldSticker = {
 };
 
 /**
+ * The field width, in CSS px, that each placement set was composed at: the
+ * column at a 1440 window for desktop, the column at the editor's 500px
+ * mobile preview for mobile. A sticker's `size` is pixels at this width.
+ */
+export const DESIGN_WIDTH = { desktop: 1088, mobile: 460 } as const;
+export type Layout = keyof typeof DESIGN_WIDTH;
+
+/**
  * Every sticker on the page, in one overlay across the whole document.
  *
  * ## This is a server component and it stays that way
@@ -61,6 +69,16 @@ export type FieldSticker = {
  * a zoom, and a phone because everything scales together rather than because
  * anything was measured.
  *
+ * ## Sizes scale with the field, like positions do
+ *
+ * `size` used to be fixed pixels while x/y were percentages, so a narrower
+ * column (desktop between 1024 and ~1150, phones under 500) pulled stickers
+ * closer together without shrinking them, and composed groups crushed into
+ * each other; a wider one (the mobile set on a tablet) pushed them apart. The
+ * field is now a size container and each sticker's width is `size` as a
+ * fraction of DESIGN_WIDTH in cqw, so the whole composition scales as one
+ * picture. At the composition width nothing changes.
+ *
  * ## The layer is pointer-events: none
  *
  * So it never eats a click meant for a panel, a link or a line of copy. Only
@@ -69,11 +87,14 @@ export type FieldSticker = {
 export function StickerField({
   stickers,
   section,
+  layout,
   className = "",
 }: {
   stickers: FieldSticker[];
   /** which section this field belongs to; rendered as data-section */
   section: string;
+  /** which placement set this is, for the width its sizes were composed at */
+  layout: Layout;
   className?: string;
 }) {
   return (
@@ -82,6 +103,7 @@ export function StickerField({
       data-sticker-field
       data-section={section}
       className={`pointer-events-none absolute inset-0 ${className}`}
+      style={{ containerType: "inline-size" }}
     >
       {(["back", "front"] as const).map((layer) => (
         <div
@@ -95,7 +117,13 @@ export function StickerField({
                 style={{ left: `${s.x}%`, top: `${s.y}%` }}
                 className="absolute -translate-x-1/2 -translate-y-1/2"
               >
-                <Sticker src={s.src} alt="" size={s.size} tilt={s.tilt} />
+                <Sticker
+                  src={s.src}
+                  alt=""
+                  size={s.size}
+                  tilt={s.tilt}
+                  style={{ width: `calc(${s.size} * 100cqw / ${DESIGN_WIDTH[layout]})` }}
+                />
               </div>
             ) : null,
           )}

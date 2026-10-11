@@ -48,8 +48,8 @@ export function ProjectSheet({
   return (
     <section id="projects" className="relative py-12">
       {DEV && <div data-editor-host="projects" />}
-      <StickerField section="projects" stickers={desktop.projects} className="hidden lg:block" />
-      <StickerField section="projects" stickers={mobile.projects} className="lg:hidden" />
+      <StickerField section="projects" layout="desktop" stickers={desktop.projects} className="hidden lg:block" />
+      <StickerField section="projects" layout="mobile" stickers={mobile.projects} className="lg:hidden" />
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="fine text-ash">page 01 — the work</p>
