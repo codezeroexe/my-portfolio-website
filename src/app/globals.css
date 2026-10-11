@@ -611,11 +611,11 @@ html[data-sticker-edit="contact"] [data-sticker-field="contact"] {
 }
 
 /* The custom cursor: a hand, drawn as a little die-cut sticker like the rest
-   of the sheet, in one of a few styles. Each style has five pictures:
-   pointing; lit acid over anything clickable, where the browser would show
-   its own hand; pushed into the page with tap marks while the button is
-   down; and over text either a writing hand or an I-beam
-   (html[data-cursor-text]), never over text inside a link. Mouse and
+   of the sheet, either as line art or as pixel art in three pixel sizes.
+   Each has five pictures: pointing; lit acid over anything clickable, where
+   the browser would show its own hand; pressed with tap marks while the
+   button is down; and over text either a writing hand (a pencil, in pixels)
+   or an I-beam (html[data-cursor-text]), never over text inside a link. Mouse and
    trackpad only, never in the sticker editor. The layout sets the defaults
    on <html>; on previews cursor-picker.tsx swaps them. Unlayered so
    Tailwind's cursor utilities do not put the system hand back. Each rule
@@ -706,108 +706,82 @@ html[data-sticker-edit="contact"] [data-sticker-field="contact"] {
     cursor: -webkit-image-set(url("/cursors/hand-line-press.png") 1x, url("/cursors/hand-line-press@2x.png") 2x) 9 9, pointer;
     cursor: image-set(url("/cursors/hand-line-press.png") 1x, url("/cursors/hand-line-press@2x.png") 2x) 9 9, pointer;
   }
-  html[data-cursor="engraved"]:not([data-sticker-edit]) {
-    cursor: url("/cursors/hand-engraved-point.png") 7 5, auto;
-    cursor: -webkit-image-set(url("/cursors/hand-engraved-point.png") 1x, url("/cursors/hand-engraved-point@2x.png") 2x) 7 5, auto;
-    cursor: image-set(url("/cursors/hand-engraved-point.png") 1x, url("/cursors/hand-engraved-point@2x.png") 2x) 7 5, auto;
+  html[data-cursor="pixel-s"]:not([data-sticker-edit]) {
+    cursor: url("/cursors/hand-pixel-s-point.png") 13 5, auto;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-s-point.png") 1x, url("/cursors/hand-pixel-s-point@2x.png") 2x) 13 5, auto;
+    cursor: image-set(url("/cursors/hand-pixel-s-point.png") 1x, url("/cursors/hand-pixel-s-point@2x.png") 2x) 13 5, auto;
   }
-  html[data-cursor="engraved"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
-    cursor: url("/cursors/hand-engraved-link.png") 7 5, pointer;
-    cursor: -webkit-image-set(url("/cursors/hand-engraved-link.png") 1x, url("/cursors/hand-engraved-link@2x.png") 2x) 7 5, pointer;
-    cursor: image-set(url("/cursors/hand-engraved-link.png") 1x, url("/cursors/hand-engraved-link@2x.png") 2x) 7 5, pointer;
+  html[data-cursor="pixel-s"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/cursors/hand-pixel-s-link.png") 13 5, pointer;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-s-link.png") 1x, url("/cursors/hand-pixel-s-link@2x.png") 2x) 13 5, pointer;
+    cursor: image-set(url("/cursors/hand-pixel-s-link.png") 1x, url("/cursors/hand-pixel-s-link@2x.png") 2x) 13 5, pointer;
   }
-  html[data-cursor="engraved"][data-cursor-text="pen"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
-    cursor: url("/cursors/hand-engraved-pen.png") 4 28, text;
-    cursor: -webkit-image-set(url("/cursors/hand-engraved-pen.png") 1x, url("/cursors/hand-engraved-pen@2x.png") 2x) 4 28, text;
-    cursor: image-set(url("/cursors/hand-engraved-pen.png") 1x, url("/cursors/hand-engraved-pen@2x.png") 2x) 4 28, text;
+  html[data-cursor="pixel-s"][data-cursor-text="pen"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
+    cursor: url("/cursors/hand-pixel-s-pen.png") 1 30, text;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-s-pen.png") 1x, url("/cursors/hand-pixel-s-pen@2x.png") 2x) 1 30, text;
+    cursor: image-set(url("/cursors/hand-pixel-s-pen.png") 1x, url("/cursors/hand-pixel-s-pen@2x.png") 2x) 1 30, text;
   }
-  html[data-cursor="engraved"][data-cursor-text="beam"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
-    cursor: url("/cursors/hand-engraved-beam.png") 16 16, text;
-    cursor: -webkit-image-set(url("/cursors/hand-engraved-beam.png") 1x, url("/cursors/hand-engraved-beam@2x.png") 2x) 16 16, text;
-    cursor: image-set(url("/cursors/hand-engraved-beam.png") 1x, url("/cursors/hand-engraved-beam@2x.png") 2x) 16 16, text;
+  html[data-cursor="pixel-s"][data-cursor-text="beam"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
+    cursor: url("/cursors/hand-pixel-s-beam.png") 15 16, text;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-s-beam.png") 1x, url("/cursors/hand-pixel-s-beam@2x.png") 2x) 15 16, text;
+    cursor: image-set(url("/cursors/hand-pixel-s-beam.png") 1x, url("/cursors/hand-pixel-s-beam@2x.png") 2x) 15 16, text;
   }
-  html[data-cursor="engraved"]:not([data-sticker-edit]):active,
-  html[data-cursor="engraved"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]):active {
-    cursor: url("/cursors/hand-engraved-press.png") 9 9, pointer;
-    cursor: -webkit-image-set(url("/cursors/hand-engraved-press.png") 1x, url("/cursors/hand-engraved-press@2x.png") 2x) 9 9, pointer;
-    cursor: image-set(url("/cursors/hand-engraved-press.png") 1x, url("/cursors/hand-engraved-press@2x.png") 2x) 9 9, pointer;
+  html[data-cursor="pixel-s"]:not([data-sticker-edit]):active,
+  html[data-cursor="pixel-s"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]):active {
+    cursor: url("/cursors/hand-pixel-s-press.png") 13 5, pointer;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-s-press.png") 1x, url("/cursors/hand-pixel-s-press@2x.png") 2x) 13 5, pointer;
+    cursor: image-set(url("/cursors/hand-pixel-s-press.png") 1x, url("/cursors/hand-pixel-s-press@2x.png") 2x) 13 5, pointer;
   }
-  html[data-cursor="manicule"]:not([data-sticker-edit]) {
-    cursor: url("/cursors/hand-manicule-point.png") 5 5, auto;
-    cursor: -webkit-image-set(url("/cursors/hand-manicule-point.png") 1x, url("/cursors/hand-manicule-point@2x.png") 2x) 5 5, auto;
-    cursor: image-set(url("/cursors/hand-manicule-point.png") 1x, url("/cursors/hand-manicule-point@2x.png") 2x) 5 5, auto;
+  html[data-cursor="pixel-m"]:not([data-sticker-edit]) {
+    cursor: url("/cursors/hand-pixel-m-point.png") 12 3, auto;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-m-point.png") 1x, url("/cursors/hand-pixel-m-point@2x.png") 2x) 12 3, auto;
+    cursor: image-set(url("/cursors/hand-pixel-m-point.png") 1x, url("/cursors/hand-pixel-m-point@2x.png") 2x) 12 3, auto;
   }
-  html[data-cursor="manicule"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
-    cursor: url("/cursors/hand-manicule-link.png") 5 5, pointer;
-    cursor: -webkit-image-set(url("/cursors/hand-manicule-link.png") 1x, url("/cursors/hand-manicule-link@2x.png") 2x) 5 5, pointer;
-    cursor: image-set(url("/cursors/hand-manicule-link.png") 1x, url("/cursors/hand-manicule-link@2x.png") 2x) 5 5, pointer;
+  html[data-cursor="pixel-m"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/cursors/hand-pixel-m-link.png") 12 3, pointer;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-m-link.png") 1x, url("/cursors/hand-pixel-m-link@2x.png") 2x) 12 3, pointer;
+    cursor: image-set(url("/cursors/hand-pixel-m-link.png") 1x, url("/cursors/hand-pixel-m-link@2x.png") 2x) 12 3, pointer;
   }
-  html[data-cursor="manicule"][data-cursor-text="pen"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
-    cursor: url("/cursors/hand-manicule-pen.png") 4 28, text;
-    cursor: -webkit-image-set(url("/cursors/hand-manicule-pen.png") 1x, url("/cursors/hand-manicule-pen@2x.png") 2x) 4 28, text;
-    cursor: image-set(url("/cursors/hand-manicule-pen.png") 1x, url("/cursors/hand-manicule-pen@2x.png") 2x) 4 28, text;
+  html[data-cursor="pixel-m"][data-cursor-text="pen"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
+    cursor: url("/cursors/hand-pixel-m-pen.png") 2 29, text;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-m-pen.png") 1x, url("/cursors/hand-pixel-m-pen@2x.png") 2x) 2 29, text;
+    cursor: image-set(url("/cursors/hand-pixel-m-pen.png") 1x, url("/cursors/hand-pixel-m-pen@2x.png") 2x) 2 29, text;
   }
-  html[data-cursor="manicule"][data-cursor-text="beam"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
-    cursor: url("/cursors/hand-manicule-beam.png") 16 16, text;
-    cursor: -webkit-image-set(url("/cursors/hand-manicule-beam.png") 1x, url("/cursors/hand-manicule-beam@2x.png") 2x) 16 16, text;
-    cursor: image-set(url("/cursors/hand-manicule-beam.png") 1x, url("/cursors/hand-manicule-beam@2x.png") 2x) 16 16, text;
+  html[data-cursor="pixel-m"][data-cursor-text="beam"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
+    cursor: url("/cursors/hand-pixel-m-beam.png") 15 15, text;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-m-beam.png") 1x, url("/cursors/hand-pixel-m-beam@2x.png") 2x) 15 15, text;
+    cursor: image-set(url("/cursors/hand-pixel-m-beam.png") 1x, url("/cursors/hand-pixel-m-beam@2x.png") 2x) 15 15, text;
   }
-  html[data-cursor="manicule"]:not([data-sticker-edit]):active,
-  html[data-cursor="manicule"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]):active {
-    cursor: url("/cursors/hand-manicule-press.png") 9 9, pointer;
-    cursor: -webkit-image-set(url("/cursors/hand-manicule-press.png") 1x, url("/cursors/hand-manicule-press@2x.png") 2x) 9 9, pointer;
-    cursor: image-set(url("/cursors/hand-manicule-press.png") 1x, url("/cursors/hand-manicule-press@2x.png") 2x) 9 9, pointer;
+  html[data-cursor="pixel-m"]:not([data-sticker-edit]):active,
+  html[data-cursor="pixel-m"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]):active {
+    cursor: url("/cursors/hand-pixel-m-press.png") 12 5, pointer;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-m-press.png") 1x, url("/cursors/hand-pixel-m-press@2x.png") 2x) 12 5, pointer;
+    cursor: image-set(url("/cursors/hand-pixel-m-press.png") 1x, url("/cursors/hand-pixel-m-press@2x.png") 2x) 12 5, pointer;
   }
-  html[data-cursor="pixel"]:not([data-sticker-edit]) {
-    cursor: url("/cursors/hand-pixel-point.png") 12 3, auto;
-    cursor: -webkit-image-set(url("/cursors/hand-pixel-point.png") 1x, url("/cursors/hand-pixel-point@2x.png") 2x) 12 3, auto;
-    cursor: image-set(url("/cursors/hand-pixel-point.png") 1x, url("/cursors/hand-pixel-point@2x.png") 2x) 12 3, auto;
+  html[data-cursor="pixel-l"]:not([data-sticker-edit]) {
+    cursor: url("/cursors/hand-pixel-l-point.png") 15 5, auto;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-l-point.png") 1x, url("/cursors/hand-pixel-l-point@2x.png") 2x) 15 5, auto;
+    cursor: image-set(url("/cursors/hand-pixel-l-point.png") 1x, url("/cursors/hand-pixel-l-point@2x.png") 2x) 15 5, auto;
   }
-  html[data-cursor="pixel"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
-    cursor: url("/cursors/hand-pixel-link.png") 12 3, pointer;
-    cursor: -webkit-image-set(url("/cursors/hand-pixel-link.png") 1x, url("/cursors/hand-pixel-link@2x.png") 2x) 12 3, pointer;
-    cursor: image-set(url("/cursors/hand-pixel-link.png") 1x, url("/cursors/hand-pixel-link@2x.png") 2x) 12 3, pointer;
+  html[data-cursor="pixel-l"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/cursors/hand-pixel-l-link.png") 15 5, pointer;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-l-link.png") 1x, url("/cursors/hand-pixel-l-link@2x.png") 2x) 15 5, pointer;
+    cursor: image-set(url("/cursors/hand-pixel-l-link.png") 1x, url("/cursors/hand-pixel-l-link@2x.png") 2x) 15 5, pointer;
   }
-  html[data-cursor="pixel"][data-cursor-text="pen"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
-    cursor: url("/cursors/hand-pixel-pen.png") 3 29, text;
-    cursor: -webkit-image-set(url("/cursors/hand-pixel-pen.png") 1x, url("/cursors/hand-pixel-pen@2x.png") 2x) 3 29, text;
-    cursor: image-set(url("/cursors/hand-pixel-pen.png") 1x, url("/cursors/hand-pixel-pen@2x.png") 2x) 3 29, text;
+  html[data-cursor="pixel-l"][data-cursor-text="pen"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
+    cursor: url("/cursors/hand-pixel-l-pen.png") 3 29, text;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-l-pen.png") 1x, url("/cursors/hand-pixel-l-pen@2x.png") 2x) 3 29, text;
+    cursor: image-set(url("/cursors/hand-pixel-l-pen.png") 1x, url("/cursors/hand-pixel-l-pen@2x.png") 2x) 3 29, text;
   }
-  html[data-cursor="pixel"][data-cursor-text="beam"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
-    cursor: url("/cursors/hand-pixel-beam.png") 16 16, text;
-    cursor: -webkit-image-set(url("/cursors/hand-pixel-beam.png") 1x, url("/cursors/hand-pixel-beam@2x.png") 2x) 16 16, text;
-    cursor: image-set(url("/cursors/hand-pixel-beam.png") 1x, url("/cursors/hand-pixel-beam@2x.png") 2x) 16 16, text;
+  html[data-cursor="pixel-l"][data-cursor-text="beam"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
+    cursor: url("/cursors/hand-pixel-l-beam.png") 15 17, text;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-l-beam.png") 1x, url("/cursors/hand-pixel-l-beam@2x.png") 2x) 15 17, text;
+    cursor: image-set(url("/cursors/hand-pixel-l-beam.png") 1x, url("/cursors/hand-pixel-l-beam@2x.png") 2x) 15 17, text;
   }
-  html[data-cursor="pixel"]:not([data-sticker-edit]):active,
-  html[data-cursor="pixel"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]):active {
-    cursor: url("/cursors/hand-pixel-press.png") 12 5, pointer;
-    cursor: -webkit-image-set(url("/cursors/hand-pixel-press.png") 1x, url("/cursors/hand-pixel-press@2x.png") 2x) 12 5, pointer;
-    cursor: image-set(url("/cursors/hand-pixel-press.png") 1x, url("/cursors/hand-pixel-press@2x.png") 2x) 12 5, pointer;
-  }
-  html[data-cursor="stamp"]:not([data-sticker-edit]) {
-    cursor: url("/cursors/hand-stamp-point.png") 5 5, auto;
-    cursor: -webkit-image-set(url("/cursors/hand-stamp-point.png") 1x, url("/cursors/hand-stamp-point@2x.png") 2x) 5 5, auto;
-    cursor: image-set(url("/cursors/hand-stamp-point.png") 1x, url("/cursors/hand-stamp-point@2x.png") 2x) 5 5, auto;
-  }
-  html[data-cursor="stamp"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
-    cursor: url("/cursors/hand-stamp-link.png") 5 5, pointer;
-    cursor: -webkit-image-set(url("/cursors/hand-stamp-link.png") 1x, url("/cursors/hand-stamp-link@2x.png") 2x) 5 5, pointer;
-    cursor: image-set(url("/cursors/hand-stamp-link.png") 1x, url("/cursors/hand-stamp-link@2x.png") 2x) 5 5, pointer;
-  }
-  html[data-cursor="stamp"][data-cursor-text="pen"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
-    cursor: url("/cursors/hand-stamp-pen.png") 4 28, text;
-    cursor: -webkit-image-set(url("/cursors/hand-stamp-pen.png") 1x, url("/cursors/hand-stamp-pen@2x.png") 2x) 4 28, text;
-    cursor: image-set(url("/cursors/hand-stamp-pen.png") 1x, url("/cursors/hand-stamp-pen@2x.png") 2x) 4 28, text;
-  }
-  html[data-cursor="stamp"][data-cursor-text="beam"]:not([data-sticker-edit]) :is(p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption):not(:is(a, button, summary, label, [role="button"]) *) {
-    cursor: url("/cursors/hand-stamp-beam.png") 16 16, text;
-    cursor: -webkit-image-set(url("/cursors/hand-stamp-beam.png") 1x, url("/cursors/hand-stamp-beam@2x.png") 2x) 16 16, text;
-    cursor: image-set(url("/cursors/hand-stamp-beam.png") 1x, url("/cursors/hand-stamp-beam@2x.png") 2x) 16 16, text;
-  }
-  html[data-cursor="stamp"]:not([data-sticker-edit]):active,
-  html[data-cursor="stamp"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]):active {
-    cursor: url("/cursors/hand-stamp-press.png") 9 9, pointer;
-    cursor: -webkit-image-set(url("/cursors/hand-stamp-press.png") 1x, url("/cursors/hand-stamp-press@2x.png") 2x) 9 9, pointer;
-    cursor: image-set(url("/cursors/hand-stamp-press.png") 1x, url("/cursors/hand-stamp-press@2x.png") 2x) 9 9, pointer;
+  html[data-cursor="pixel-l"]:not([data-sticker-edit]):active,
+  html[data-cursor="pixel-l"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]):active {
+    cursor: url("/cursors/hand-pixel-l-press.png") 15 5, pointer;
+    cursor: -webkit-image-set(url("/cursors/hand-pixel-l-press.png") 1x, url("/cursors/hand-pixel-l-press@2x.png") 2x) 15 5, pointer;
+    cursor: image-set(url("/cursors/hand-pixel-l-press.png") 1x, url("/cursors/hand-pixel-l-press@2x.png") 2x) 15 5, pointer;
   }
 }
