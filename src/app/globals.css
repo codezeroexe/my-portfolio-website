@@ -610,42 +610,65 @@ html[data-sticker-edit="contact"] [data-sticker-field="contact"] {
   display: none;
 }
 
-/* Marker-pen cursors, drawn as little die-cut stickers with the felt tip at
-   (8, 8); over anything clickable an ink blot under the tip stands in for
-   the pointing hand. Mouse and trackpad only, never in the sticker editor.
-   The layout sets html[data-cursor]; on previews cursor-picker.tsx swaps it.
-   Unlayered so Tailwind's cursor utilities do not put the hand back. Each
-   rule says it three ways: plain url for any browser, then the prefixed and
-   unprefixed image-set for a sharp 2x; a browser keeps the last it reads. */
+/* Custom cursors, drawn as little die-cut stickers like the rest of the
+   sheet: a paper-cut arrow, a marker pen, a printer's pointing hand,
+   scissors and a bolt. Over anything clickable each lights up in another
+   colour (the marker leaves an ink blot instead) where the browser would
+   show its pointing hand. Mouse and trackpad only, never in the sticker
+   editor. The layout sets html[data-cursor]; on previews cursor-picker.tsx
+   swaps it. Unlayered so Tailwind's cursor utilities do not put the hand
+   back. Each rule says it three ways: plain url for any browser, then the
+   prefixed and unprefixed image-set for a sharp 2x; a browser keeps the
+   last it reads. The two numbers are the hotspot, the tip, in 1x px. */
 @media (pointer: fine) {
-  html[data-cursor="paint"]:not([data-sticker-edit]) {
-    cursor: url("/cursors/cursor-paint.png") 8 8, auto;
-    cursor: -webkit-image-set(url("/cursors/cursor-paint.png") 1x, url("/cursors/cursor-paint@2x.png") 2x) 8 8, auto;
-    cursor: image-set(url("/cursors/cursor-paint.png") 1x, url("/cursors/cursor-paint@2x.png") 2x) 8 8, auto;
+  html[data-cursor="arrow"]:not([data-sticker-edit]) {
+    cursor: url("/cursors/cursor-arrow.png") 5 5, auto;
+    cursor: -webkit-image-set(url("/cursors/cursor-arrow.png") 1x, url("/cursors/cursor-arrow@2x.png") 2x) 5 5, auto;
+    cursor: image-set(url("/cursors/cursor-arrow.png") 1x, url("/cursors/cursor-arrow@2x.png") 2x) 5 5, auto;
   }
-  html[data-cursor="paint"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
-    cursor: url("/cursors/cursor-paint-point.png") 8 8, pointer;
-    cursor: -webkit-image-set(url("/cursors/cursor-paint-point.png") 1x, url("/cursors/cursor-paint-point@2x.png") 2x) 8 8, pointer;
-    cursor: image-set(url("/cursors/cursor-paint-point.png") 1x, url("/cursors/cursor-paint-point@2x.png") 2x) 8 8, pointer;
+  html[data-cursor="arrow"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/cursors/cursor-arrow-point.png") 5 5, pointer;
+    cursor: -webkit-image-set(url("/cursors/cursor-arrow-point.png") 1x, url("/cursors/cursor-arrow-point@2x.png") 2x) 5 5, pointer;
+    cursor: image-set(url("/cursors/cursor-arrow-point.png") 1x, url("/cursors/cursor-arrow-point@2x.png") 2x) 5 5, pointer;
   }
-  html[data-cursor="red"]:not([data-sticker-edit]) {
-    cursor: url("/cursors/cursor-red.png") 8 8, auto;
-    cursor: -webkit-image-set(url("/cursors/cursor-red.png") 1x, url("/cursors/cursor-red@2x.png") 2x) 8 8, auto;
-    cursor: image-set(url("/cursors/cursor-red.png") 1x, url("/cursors/cursor-red@2x.png") 2x) 8 8, auto;
+  html[data-cursor="marker"]:not([data-sticker-edit]) {
+    cursor: url("/cursors/cursor-marker.png") 8 8, auto;
+    cursor: -webkit-image-set(url("/cursors/cursor-marker.png") 1x, url("/cursors/cursor-marker@2x.png") 2x) 8 8, auto;
+    cursor: image-set(url("/cursors/cursor-marker.png") 1x, url("/cursors/cursor-marker@2x.png") 2x) 8 8, auto;
   }
-  html[data-cursor="red"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
-    cursor: url("/cursors/cursor-red-point.png") 8 8, pointer;
-    cursor: -webkit-image-set(url("/cursors/cursor-red-point.png") 1x, url("/cursors/cursor-red-point@2x.png") 2x) 8 8, pointer;
-    cursor: image-set(url("/cursors/cursor-red-point.png") 1x, url("/cursors/cursor-red-point@2x.png") 2x) 8 8, pointer;
+  html[data-cursor="marker"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/cursors/cursor-marker-point.png") 8 8, pointer;
+    cursor: -webkit-image-set(url("/cursors/cursor-marker-point.png") 1x, url("/cursors/cursor-marker-point@2x.png") 2x) 8 8, pointer;
+    cursor: image-set(url("/cursors/cursor-marker-point.png") 1x, url("/cursors/cursor-marker-point@2x.png") 2x) 8 8, pointer;
   }
-  html[data-cursor="highlighter"]:not([data-sticker-edit]) {
-    cursor: url("/cursors/cursor-highlighter.png") 8 8, auto;
-    cursor: -webkit-image-set(url("/cursors/cursor-highlighter.png") 1x, url("/cursors/cursor-highlighter@2x.png") 2x) 8 8, auto;
-    cursor: image-set(url("/cursors/cursor-highlighter.png") 1x, url("/cursors/cursor-highlighter@2x.png") 2x) 8 8, auto;
+  html[data-cursor="hand"]:not([data-sticker-edit]) {
+    cursor: url("/cursors/cursor-hand.png") 7 5, auto;
+    cursor: -webkit-image-set(url("/cursors/cursor-hand.png") 1x, url("/cursors/cursor-hand@2x.png") 2x) 7 5, auto;
+    cursor: image-set(url("/cursors/cursor-hand.png") 1x, url("/cursors/cursor-hand@2x.png") 2x) 7 5, auto;
   }
-  html[data-cursor="highlighter"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
-    cursor: url("/cursors/cursor-highlighter-point.png") 8 8, pointer;
-    cursor: -webkit-image-set(url("/cursors/cursor-highlighter-point.png") 1x, url("/cursors/cursor-highlighter-point@2x.png") 2x) 8 8, pointer;
-    cursor: image-set(url("/cursors/cursor-highlighter-point.png") 1x, url("/cursors/cursor-highlighter-point@2x.png") 2x) 8 8, pointer;
+  html[data-cursor="hand"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/cursors/cursor-hand-point.png") 7 5, pointer;
+    cursor: -webkit-image-set(url("/cursors/cursor-hand-point.png") 1x, url("/cursors/cursor-hand-point@2x.png") 2x) 7 5, pointer;
+    cursor: image-set(url("/cursors/cursor-hand-point.png") 1x, url("/cursors/cursor-hand-point@2x.png") 2x) 7 5, pointer;
+  }
+  html[data-cursor="scissors"]:not([data-sticker-edit]) {
+    cursor: url("/cursors/cursor-scissors.png") 5 6, auto;
+    cursor: -webkit-image-set(url("/cursors/cursor-scissors.png") 1x, url("/cursors/cursor-scissors@2x.png") 2x) 5 6, auto;
+    cursor: image-set(url("/cursors/cursor-scissors.png") 1x, url("/cursors/cursor-scissors@2x.png") 2x) 5 6, auto;
+  }
+  html[data-cursor="scissors"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/cursors/cursor-scissors-point.png") 5 6, pointer;
+    cursor: -webkit-image-set(url("/cursors/cursor-scissors-point.png") 1x, url("/cursors/cursor-scissors-point@2x.png") 2x) 5 6, pointer;
+    cursor: image-set(url("/cursors/cursor-scissors-point.png") 1x, url("/cursors/cursor-scissors-point@2x.png") 2x) 5 6, pointer;
+  }
+  html[data-cursor="bolt"]:not([data-sticker-edit]) {
+    cursor: url("/cursors/cursor-bolt.png") 5 5, auto;
+    cursor: -webkit-image-set(url("/cursors/cursor-bolt.png") 1x, url("/cursors/cursor-bolt@2x.png") 2x) 5 5, auto;
+    cursor: image-set(url("/cursors/cursor-bolt.png") 1x, url("/cursors/cursor-bolt@2x.png") 2x) 5 5, auto;
+  }
+  html[data-cursor="bolt"]:not([data-sticker-edit]) :is(a, button, summary, label, [role="button"]) {
+    cursor: url("/cursors/cursor-bolt-point.png") 5 5, pointer;
+    cursor: -webkit-image-set(url("/cursors/cursor-bolt-point.png") 1x, url("/cursors/cursor-bolt-point@2x.png") 2x) 5 5, pointer;
+    cursor: image-set(url("/cursors/cursor-bolt-point.png") 1x, url("/cursors/cursor-bolt-point@2x.png") 2x) 5 5, pointer;
   }
 }

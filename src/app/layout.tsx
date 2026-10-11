@@ -6,7 +6,7 @@ import { EdgeClips } from "@/components/edges";
 import { LiquidGround } from "@/components/liquid-ground";
 import { ViewportBadge } from "@/components/viewport-badge";
 import { CursorPicker } from "@/components/cursor-picker";
-import { DEFAULT_MARKER } from "@/lib/cursor";
+import { DEFAULT_CURSOR } from "@/lib/cursor";
 
 const display = Anton({
   variable: "--font-display",
@@ -68,7 +68,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-cursor={DEFAULT_MARKER}
+      data-cursor={DEFAULT_CURSOR}
       className={`${display.variable} ${body.variable} ${hand.variable} ${fine.variable} ${ticket.variable}`}
     >
       <body className="xerox">
@@ -87,8 +87,8 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
-        {/* the marker cursor is CSS on html[data-cursor]; previews and
-            development get a picker to try the other markers */}
+        {/* the cursor is CSS on html[data-cursor]; previews and development
+            get a picker to try the other shapes */}
         {process.env.VERCEL_ENV !== "production" && <CursorPicker />}
         <ViewportBadge />
       </body>
