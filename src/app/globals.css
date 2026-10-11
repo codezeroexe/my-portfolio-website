@@ -415,14 +415,17 @@
 
      Two boxes because of the order CSS paints in: filter, then clip, then
      mask. The shadow lives on the outer link so it follows the shape the
-     inner card is cut to; on the card itself the clip would cut the shadow
+     inner card is cut to; on the card itself the mask would cut the shadow
      away with the edge.
 
-     The wear is laid over everything, cover included, so the stub reads as
-     printed on the same card: grain, a crease and grime multiplied in, faded
-     corners and scuffs screened in. The frayed edge is a clip, not a
-     displacement, for the same reason as every other edge on the sheet
-     (paper-filters.tsx): it cuts the silhouette and leaves the type alone. */
+     The wear is one generated texture (public/ticket-wear.webp): ink rubbed
+     off along the edges and corners, a fold cracked along its crest, a
+     corner once bent, uneven print, scuffs and grime. It is laid over
+     everything, cover included, so the stub reads as printed on the same
+     card. The edge (public/ticket-edge.webp: corners rounded by handling, a
+     few chips) is a mask, not a displacement, for the same reason as every
+     other edge on the sheet (paper-filters.tsx): it cuts the silhouette and
+     leaves the type alone. */
   .np-ticket {
     --stub: 6.5rem;
     --notch: 9px;
@@ -443,44 +446,26 @@
     position: relative;
     display: flex;
     background: var(--tk-bg, var(--acid));
-    clip-path: polygon(0.6% 1.8%, 3.5% 0.4%, 8.2% 0.9%, 12.1% 0.6%, 16.1% 1.2%, 20.7% 0.7%, 23.5% 1.2%, 27.7% 3.1%, 30.3% 1.4%, 33.3% 1.2%, 36.1% 3.4%, 40.3% 3.1%, 44.4% 1.0%, 49.1% 1.4%, 52.0% 1.1%, 56.1% 0.8%, 58.7% 0.2%, 63.0% 0.7%, 66.8% 1.4%, 70.1% 1.5%, 74.8% 1.4%, 77.6% 3.3%, 81.7% 1.2%, 85.3% 1.4%, 88.4% 0.7%, 92.6% 0.7%, 97.5% 0.4%, 98.6% 0.9%, 100.0% 2.6%, 99.4% 10.0%, 99.4% 17.6%, 99.4% 25.5%, 99.5% 35.3%, 99.9% 42.3%, 99.9% 48.5%, 100.0% 57.8%, 99.6% 65.0%, 99.8% 71.8%, 99.5% 78.9%, 99.3% 85.5%, 99.5% 94.5%, 99.4% 98.8%, 97.8% 100.0%, 94.1% 98.4%, 89.5% 100.0%, 84.6% 99.0%, 80.5% 99.7%, 76.1% 99.9%, 72.1% 99.4%, 67.3% 98.6%, 64.4% 98.6%, 59.8% 98.6%, 55.8% 99.5%, 51.6% 99.6%, 47.6% 99.6%, 43.9% 99.9%, 39.1% 96.5%, 34.8% 96.8%, 31.8% 98.7%, 28.4% 99.7%, 25.3% 98.6%, 22.5% 99.0%, 19.9% 98.7%, 17.3% 98.8%, 13.9% 99.7%, 9.9% 98.9%, 6.0% 98.8%, 3.0% 99.2%, 1.2% 99.0%, 0.0% 97.2%, 0.3% 86.9%, 0.1% 77.4%, 0.0% 69.4%, 0.7% 59.2%, 0.5% 49.9%, 0.6% 42.0%, 0.3% 35.6%, 0.6% 27.9%, 0.1% 21.0%, 0.6% 14.5%, 0.6% 7.0%);
-    /* a notch bitten out at each end of the perforation */
+    /* the worn edge, intersected with a notch bitten out at each end of the
+       perforation */
     -webkit-mask:
+      url("/ticket-edge.webp") 0 0 / 100% 100%,
       radial-gradient(circle var(--notch) at var(--notch-x) 0, transparent 98%, #000) top / 100% 51% no-repeat,
       radial-gradient(circle var(--notch) at var(--notch-x) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
+    -webkit-mask-composite: source-in, source-over, source-over;
     mask:
+      url("/ticket-edge.webp") 0 0 / 100% 100%,
       radial-gradient(circle var(--notch) at var(--notch-x) 0, transparent 98%, #000) top / 100% 51% no-repeat,
       radial-gradient(circle var(--notch) at var(--notch-x) 100%, transparent 98%, #000) bottom / 100% 51% no-repeat;
+    mask-composite: intersect, add, add;
   }
-  /* grain, the crease's shadow side, a coffee ring and grime at the edges */
   .np-ticket .tk-card::after {
     content: "";
     position: absolute;
     inset: 0;
     z-index: 2;
     pointer-events: none;
-    mix-blend-mode: multiply;
-    background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23p)' opacity='0.5'/%3E%3C/svg%3E") 0 0 / 160px 160px,
-      linear-gradient(96deg, transparent 63.2%, oklch(0.3 0.03 60 / 0.28) 63.6%, transparent 64.6%),
-      radial-gradient(circle 1.9rem at 84% 76%, transparent 78%, oklch(0.45 0.08 60 / 0.3) 84%, oklch(0.45 0.08 60 / 0.12) 90%, transparent 100%),
-      radial-gradient(ellipse at 50% 50%, transparent 58%, oklch(0.35 0.04 60 / 0.38) 100%);
-  }
-  /* faded corners, the crease's lit side and a couple of scuffs */
-  .np-ticket .tk-card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    mix-blend-mode: screen;
-    background:
-      radial-gradient(ellipse 45% 70% at 100% 0%, oklch(1 0 0 / 0.32), transparent 70%),
-      radial-gradient(ellipse 35% 55% at 0% 100%, oklch(1 0 0 / 0.26), transparent 70%),
-      linear-gradient(96deg, transparent 62.4%, oklch(1 0 0 / 0.3) 63%, transparent 63.4%),
-      linear-gradient(168deg, transparent 30%, oklch(1 0 0 / 0.22) 30.4%, transparent 31%),
-      linear-gradient(12deg, transparent 71%, oklch(1 0 0 / 0.18) 71.3%, transparent 71.8%),
-      radial-gradient(ellipse 14% 22% at 38% 8%, oklch(1 0 0 / 0.2), transparent 70%);
+    background: url("/ticket-wear.webp") 0 0 / 100% 100%;
   }
   .np-ticket .tk-stub {
     position: relative;
@@ -529,6 +514,11 @@
   .np-ticket.tk-flip .tk-card {
     --notch-x: calc(100% - var(--stub));
     flex-direction: row-reverse;
+  }
+  /* the wear turned with it, so the fold stays in the body, not beside the
+     perforation */
+  .np-ticket.tk-flip .tk-card::after {
+    transform: scaleX(-1);
   }
   .np-ticket.tk-flip .tk-stub::after {
     right: auto;

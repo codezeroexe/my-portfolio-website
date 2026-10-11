@@ -47,7 +47,14 @@ export function OnRepeat({ album, flip = false }: { album: WeekAlbum; flip?: boo
         </span>
         <span className="tk-body">
           <span className="tk-small block font-bold">admit one · on repeat</span>
-          <span className="tk-title mt-1.5 block text-xl sm:text-2xl">{album.name}</span>
+          {/* a long name steps down a size and stops at two lines, so the
+              ticket keeps its height and clear of the stickers under it */}
+          <span
+            title={album.name}
+            className={`tk-title mt-1.5 line-clamp-2 ${album.name.length > 9 ? "text-lg" : "text-xl sm:text-2xl"}`}
+          >
+            {album.name}
+          </span>
           <span className="tk-small mt-1 block text-[0.8rem] normal-case tracking-normal">
             {album.artist}
           </span>
