@@ -1,23 +1,32 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { HOTSPOTS, type Hand, type HandState } from "@/lib/cursor";
+
+type HandState = "point" | "link" | "press" | "pen";
+
+/** each picture's hotspot, [x, y] in px: the fingertip or the pencil point.
+    The CSS in globals.css carries the same numbers. */
+const HOTSPOTS: Record<HandState, [number, number]> = {
+  point: [15, 5],
+  link: [15, 5],
+  press: [15, 5],
+  pen: [3, 29],
+};
 
 const LINK = 'a, button, summary, label, [role="button"]';
 const TEXT = "p, h1, h2, h3, h4, h5, h6, li, blockquote, figcaption";
-const WATCH = ["data-cursor", "data-cursor-text", "data-cursor-label", "data-cursor-swing", "data-sticker-edit"];
 
 /**
- * The cursor's two extras. The plain cursor is CSS (globals.css) and needs
- * none of this; each extra runs only while <html> says "on":
+ * The cursor's two extras on top of the CSS cursor (globals.css):
  *
- * - data-cursor-label: over a link with data-cursor-label, a strip of tape
- *   beside the hand saying what a click does.
- * - data-cursor-swing: the page draws the hand and the system cursor hides,
- *   so the hand can lean into the movement like a paper cut-out pinned at the
- *   fingertip, and dip on a click. Held upright under reduced motion.
+ * - The page draws the hand and the system cursor hides, so the hand can
+ *   lean into the movement like a paper cut-out pinned at the fingertip, and
+ *   dip on a click. Held upright under reduced motion.
+ * - Over a link with data-cursor-label, a strip of tape beside the hand says
+ *   what a click does.
  *
- * Mouse and trackpad only, never in the sticker editor.
+ * Mouse and trackpad only, never in the sticker editor, where the CSS cursor
+ * steps aside too.
  */
 export function CursorFx() {
   const handRef = useRef<HTMLImageElement>(null);
@@ -32,9 +41,7 @@ export function CursorFx() {
     const fine = window.matchMedia("(pointer: fine)");
     const still = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    let label = false;
-    let swing = false;
-    let hand: Exclude<Hand, "off"> = "line";
+    let on = false;
     let x = 0;
     let y = 0;
     let lastX = 0;
@@ -60,8 +67,7 @@ export function CursorFx() {
         const say = link.closest("[data-cursor-label]")?.getAttribute("data-cursor-label") ?? "";
         return { state: down ? "press" : "link", say };
       }
-      const t = html.dataset.cursorText;
-      if ((t === "pen" || t === "beam") && over?.closest(TEXT)) return { state: t, say: "" };
+      if (over?.closest(TEXT)) return { state: "pen", say: "" };
       return { state: down ? "press" : "point", say: "" };
     };
 
@@ -77,9 +83,9 @@ export function CursorFx() {
       const { state, say } = look();
       let busy = false;
 
-      if (swing) {
-        const [hx, hy] = HOTSPOTS[hand][state];
-        const next = `/cursors/hand-${hand}-${state}@2x.png`;
+      if (on) {
+        const [hx, hy] = HOTSPOTS[state];
+        const next = `/cursors/hand-${state}@2x.png`;
         if (next !== src) img.src = src = next;
         const vx = x - lastX;
         lastX = x;
@@ -99,7 +105,7 @@ export function CursorFx() {
         busy = vx !== 0 || Math.abs(spin) > 0.01 || Math.abs(tilt) > 0.05 || Math.abs((down ? 0.86 : 1) - dip) > 0.002;
       }
 
-      if (label && say) {
+      if (on && say) {
         if (say !== said) {
           words.textContent = said = say;
           tagW = tag.offsetWidth;
@@ -117,23 +123,19 @@ export function CursorFx() {
     };
 
     const wake = () => {
-      if (!frame && inside && (label || swing)) frame = requestAnimationFrame(tick);
+      if (!frame && inside && on) frame = requestAnimationFrame(tick);
     };
 
     const read = () => {
-      const ok = fine.matches && !("stickerEdit" in html.dataset);
-      const h = html.dataset.cursor;
-      label = ok && html.dataset.cursorLabel === "on";
-      swing = ok && html.dataset.cursorSwing === "on" && !!h && h in HOTSPOTS;
-      if (swing) hand = h as Exclude<Hand, "off">;
-      if (swing && inside) html.dataset.cursorLive = "";
+      on = fine.matches && !("stickerEdit" in html.dataset);
+      if (on && inside) html.dataset.cursorLive = "";
       else delete html.dataset.cursorLive;
-      img.style.opacity = swing && inside ? "1" : "0";
-      if (!label) tag.style.opacity = "0";
+      img.style.opacity = on && inside ? "1" : "0";
+      if (!on) tag.style.opacity = "0";
       src = "";
-      if (swing) {
+      if (on) {
         // fetch the other states now, so the first swap doesn't blink
-        for (const s of Object.keys(HOTSPOTS[hand])) new Image().src = `/cursors/hand-${hand}-${s}@2x.png`;
+        for (const s of Object.keys(HOTSPOTS)) new Image().src = `/cursors/hand-${s}@2x.png`;
       }
       wake();
     };
@@ -146,7 +148,7 @@ export function CursorFx() {
       if (!inside) {
         inside = true;
         lastX = x;
-        if (swing) {
+        if (on) {
           html.dataset.cursorLive = "";
           img.style.opacity = "1";
         }
@@ -177,7 +179,7 @@ export function CursorFx() {
     };
 
     const watch = new MutationObserver(read);
-    watch.observe(html, { attributes: true, attributeFilter: WATCH });
+    watch.observe(html, { attributes: true, attributeFilter: ["data-sticker-edit"] });
     fine.addEventListener("change", read);
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("pointerdown", press, { passive: true });
