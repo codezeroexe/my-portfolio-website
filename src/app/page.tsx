@@ -17,6 +17,8 @@ import { CautionTape } from "@/components/caution-tape";
 import { OnRepeat, OnRepeatSkipped } from "@/components/on-repeat";
 import { CopyEmail } from "@/components/copy-email";
 import { weekAlbum } from "@/lib/lastfm";
+import { paddock } from "@/lib/f1";
+import { PaddockPass } from "@/components/paddock-pass";
 
 export const revalidate = 3600;
 
@@ -114,6 +116,7 @@ export default async function Home() {
   // module instance and cached, so a draft saved afterwards never shows up.
   // Production has no draft file and always reads the committed source.
   const { album: onRepeat, why: onRepeatWhy } = await weekAlbum();
+  const grid = await paddock();
   // previews (and dev) print why there is no ticket where it would be;
   // production just leaves the space empty
   const showWhy =
@@ -265,13 +268,29 @@ export default async function Home() {
 
         <CautionTape kind="stop" tilt={-0.4} />
 
+        {/* ── the grid (hidden when the F1 feed gives nothing) ──────── */}
+        {grid && (
+          <>
+            <Settle>
+              <section id="paddock" className="relative py-12">
+                <p className="fine text-ash">page 03 — the grid</p>
+                <h2 className="scream mt-3 text-6xl leading-[0.82] sm:text-8xl">
+                  LIGHTS <span className="blank">OUT</span>
+                </h2>
+                <PaddockPass data={grid} />
+              </section>
+            </Settle>
+            <CautionTape kind="diag" tilt={0.6} />
+          </>
+        )}
+
         {/* ── contact ───────────────────────────────────────────────── */}
         <Settle>
           <section id="contact" className="relative py-12">
             <div data-editor-host="contact" />
             <StickerField section="contact" stickers={desktop.contact} className="hidden lg:block" />
             <StickerField section="contact" stickers={mobile.contact} className="lg:hidden" />
-            <p className="fine text-ash">page 03 — talk to me</p>
+            <p className="fine text-ash">page {grid ? "04" : "03"} — talk to me</p>
             <h2 className="scream mt-3 text-6xl leading-[0.82] sm:text-8xl">
               SAY <span className="blank">HI</span>
             </h2>
