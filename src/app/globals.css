@@ -617,3 +617,61 @@ html[data-sticker-edit="contact"] [data-sticker-field="contact"] {
 html[data-ground] .partition {
   backdrop-filter: none;
 }
+
+/* scroll-tape.tsx: masking tape along the top edge, as long as the page is
+   read. --read is how far down the page is, 0 to 1; the strip shows through a
+   window that grows from a short stub, so there is something to grow at the
+   top of the page. */
+.scroll-tape {
+  --tape-w: calc(36px + var(--read, 0) * (100% - 36px));
+  position: fixed;
+  top: -3px;
+  left: -6px;
+  right: -6px;
+  height: 15px;
+  z-index: 60;
+  pointer-events: none;
+  transform: rotate(-0.25deg);
+  transform-origin: 0 50%;
+}
+
+.scroll-tape-clip {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--tape-w);
+  overflow: hidden;
+}
+
+.scroll-tape-body,
+.scroll-tape-end {
+  background: linear-gradient(
+    180deg,
+    oklch(0.9 0.05 90 / 0.92),
+    oklch(0.83 0.07 85 / 0.88) 55%,
+    oklch(0.87 0.05 92 / 0.92)
+  );
+  box-shadow: 0 2px 4px oklch(0 0 0 / 0.45);
+}
+
+.scroll-tape-body {
+  width: calc(100vw + 12px);
+  height: 100%;
+  filter: url(#tape-torn);
+}
+
+/* the torn end, riding the edge of the window */
+.scroll-tape-end {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--tape-w);
+  width: 9px;
+  box-shadow: none;
+  clip-path: polygon(0 0, 55% 0, 100% 22%, 62% 38%, 100% 56%, 58% 74%, 92% 100%, 0 100%);
+}
+
+@media print {
+  .scroll-tape {
+    display: none;
+  }
+}
