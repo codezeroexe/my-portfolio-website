@@ -50,11 +50,12 @@ export const projects: Project[] = [
     pushed_at: "2026-10-14",
   },
   {
-    name: "Zetavote",
-    repo: "zetavote",
+    name: "Interlude",
+    repo: "interlude",
     description:
-      "Local-first voting with cryptographic voter authentication, encrypted ballots, tamper-evident audits and receipt-based verification. Runs on-device.",
-    topics: ["TypeScript", "SQLite", "FastAPI", "Local-first"],
-    pushed_at: "2026-10-24",
+      "A calm, glanceable screen for your Mac while you step away. Apple's aerial videos behind glass cards: clock, weather, reminders, world clock, focus timer and now playing.",
+    keepDescription: true,
+    topics: ["Swift", "SwiftUI", "macOS", "Menu bar app"],
+    pushed_at: "2026-10-29",
   },
 ];

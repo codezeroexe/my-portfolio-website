@@ -7,7 +7,7 @@ const NOTES: Record<string, string> = {
   ultron: "J.A.R.V.I.S., but on a Mac",
   rabbithole: "API keys stay in the system keychain",
   levels: "nothing builds until you say so",
-  zetavote: "runs on a laptop, on a plane",
+  interlude: "album art becomes the wallpaper",
 };
 
 // no two panels sit square on the sheet
