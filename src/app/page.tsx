@@ -98,7 +98,7 @@ export default async function Home() {
         return found
           ? {
               ...p,
-              description: found.description || p.description,
+              description: (!p.keepDescription && found.description) || p.description,
               pushed_at: found.pushed_at,
             }
           : p;

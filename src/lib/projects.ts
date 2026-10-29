@@ -8,7 +8,10 @@ export type Project = {
   /** the GitHub slug — this is what the live fetch matches on */
   repo: string;
   description: string;
+  /** true keeps the text here instead of the shorter GitHub About line */
+  keepDescription?: boolean;
   topics: string[];
+  /** empty when unknown: the stamp is left off until the live fetch fills it */
   pushed_at: string;
 };
 
@@ -22,35 +25,37 @@ export type Project = {
  */
 export const projects: Project[] = [
   {
-    name: "Zetavote",
-    repo: "zetavote",
+    name: "Ultron",
+    repo: "ultron",
     description:
-      "Local-first voting with cryptographic voter authentication, encrypted ballots, tamper-evident audits and receipt-based verification. Runs on-device.",
-    topics: ["TypeScript", "SQLite", "FastAPI", "Local-first"],
-    pushed_at: "2026-09-29",
+      "A voice assistant that lives on your Mac and sends a legion of AI units to do the work. Local voice, Claude units, asks before anything risky.",
+    topics: ["Swift", "Python", "MLX", "Claude Code"],
+    pushed_at: "2026-10-25",
   },
   {
-    name: "Yggdrasil",
-    repo: "yggdrasil-prototype",
+    name: "Rabbithole",
+    repo: "rabbithole",
     description:
-      "Interactive prototype for a team-based CTF challenge: task workspaces, downloadable artifacts, progress tracking and flag validation.",
-    topics: ["TypeScript", "CTF", "Web app"],
-    pushed_at: "2026-08-26",
+      "A graph explorer for deep dives. Type a topic and it lays out where to go next as cards, one column per level of depth. Open, add or dismiss nodes, and each one you open gets a short research note. Free on Wikipedia, or plug in Anthropic, OpenAI, Gemini, OpenRouter, Ollama or LM Studio.",
+    keepDescription: true,
+    topics: ["TypeScript", "Electron", "Local + hosted AI"],
+    pushed_at: "2026-10-19",
   },
   {
-    name: "SQLShield",
-    repo: "sqlshield-demo",
+    name: "Levels",
+    repo: "levels",
     description:
-      "Shows how parameterized queries prevent SQL injection, with the unsafe string-concatenation version sitting right beside it.",
-    topics: ["JavaScript", "Security", "SQL"],
-    pushed_at: "2026-09-24",
+      "Claude Code skills that rate parts of a project on a 1 to 5 scale, propose options, and hand the chosen work to cheaper models behind a confirmation gate.",
+    topics: ["Claude Code", "Agent skills", "Plugin"],
+    pushed_at: "2026-10-14",
   },
   {
-    name: "Fraud Detector v3",
-    repo: "neural-fraud-detector-v3",
+    name: "Interlude",
+    repo: "interlude",
     description:
-      "Third pass at the credit-card fraud detector: a stacked ensemble of three models to lift precision.",
-    topics: ["Ensemble", "Fraud detection", "Deep learning"],
-    pushed_at: "2026-04-23",
+      "A calm, glanceable screen for your Mac while you step away. Apple's aerial videos behind glass cards: clock, weather, reminders, world clock, focus timer and now playing.",
+    keepDescription: true,
+    topics: ["Swift", "SwiftUI", "macOS", "Menu bar app"],
+    pushed_at: "2026-10-29",
   },
 ];

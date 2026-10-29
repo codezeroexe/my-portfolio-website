@@ -4,10 +4,10 @@ import type { SectionPlacements } from "@/lib/placements";
 
 // short margin notes, not a second description
 const NOTES: Record<string, string> = {
-  zetavote: "runs on a laptop, on a plane",
-  "yggdrasil-prototype": "friendly flags",
-  "sqlshield-demo": "the bad version sits right beside it",
-  "neural-fraud-detector-v3": "v1, v2, then this",
+  ultron: "J.A.R.V.I.S., but on a Mac",
+  rabbithole: "API keys stay in the system keychain",
+  levels: "nothing builds until you say so",
+  interlude: "album art becomes the wallpaper",
 };
 
 // no two panels sit square on the sheet
@@ -108,14 +108,18 @@ export function ProjectSheet({
             </ul>
 
             <span className="panel-foot">
-              <span
-                className="stamp fine"
-                style={{
-                  ["--stamp-tilt" as string]: `${STAMP_TILTS[i % STAMP_TILTS.length]}deg`,
-                }}
-              >
-                pushed {pushed(r.pushed_at)}
-              </span>
+              {r.pushed_at ? (
+                <span
+                  className="stamp fine"
+                  style={{
+                    ["--stamp-tilt" as string]: `${STAMP_TILTS[i % STAMP_TILTS.length]}deg`,
+                  }}
+                >
+                  pushed {pushed(r.pushed_at)}
+                </span>
+              ) : (
+                <span />
+              )}
               <span className="scream repo-slab text-sm">repo ↗</span>
             </span>
           </a>
