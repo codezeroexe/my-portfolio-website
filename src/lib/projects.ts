@@ -9,6 +9,7 @@ export type Project = {
   repo: string;
   description: string;
   topics: string[];
+  /** empty when unknown: the stamp is left off until the live fetch fills it */
   pushed_at: string;
 };
 
@@ -22,35 +23,34 @@ export type Project = {
  */
 export const projects: Project[] = [
   {
+    name: "Ultron",
+    repo: "ultron",
+    description:
+      "A voice assistant that lives on your Mac and sends a legion of AI units to do the work. Local voice, Claude units, asks before anything risky.",
+    topics: ["Swift", "Python", "MLX", "Claude Code"],
+    pushed_at: "",
+  },
+  {
+    name: "Rabbithole",
+    repo: "rabbithole",
+    description: "Graph explorer for deep dives, with pluggable AI backends.",
+    topics: ["TypeScript", "Electron", "Local + hosted AI"],
+    pushed_at: "",
+  },
+  {
+    name: "Levels",
+    repo: "levels",
+    description:
+      "Claude Code skills that rate parts of a project on a 1 to 5 scale, propose options, and hand the chosen work to cheaper models behind a confirmation gate.",
+    topics: ["Claude Code", "Agent skills", "Plugin"],
+    pushed_at: "",
+  },
+  {
     name: "Zetavote",
     repo: "zetavote",
     description:
       "Local-first voting with cryptographic voter authentication, encrypted ballots, tamper-evident audits and receipt-based verification. Runs on-device.",
     topics: ["TypeScript", "SQLite", "FastAPI", "Local-first"],
     pushed_at: "2026-09-29",
-  },
-  {
-    name: "Yggdrasil",
-    repo: "yggdrasil-prototype",
-    description:
-      "Interactive prototype for a team-based CTF challenge: task workspaces, downloadable artifacts, progress tracking and flag validation.",
-    topics: ["TypeScript", "CTF", "Web app"],
-    pushed_at: "2026-08-26",
-  },
-  {
-    name: "SQLShield",
-    repo: "sqlshield-demo",
-    description:
-      "Shows how parameterized queries prevent SQL injection, with the unsafe string-concatenation version sitting right beside it.",
-    topics: ["JavaScript", "Security", "SQL"],
-    pushed_at: "2026-09-24",
-  },
-  {
-    name: "Fraud Detector v3",
-    repo: "neural-fraud-detector-v3",
-    description:
-      "Third pass at the credit-card fraud detector: a stacked ensemble of three models to lift precision.",
-    topics: ["Ensemble", "Fraud detection", "Deep learning"],
-    pushed_at: "2026-04-23",
   },
 ];
