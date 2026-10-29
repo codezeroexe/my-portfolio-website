@@ -47,6 +47,4 @@ export const LOGOS = [
   { src: "/logos/openjdk.svg", label: "Java" },
   { src: "/logos/kotlin.svg", label: "Kotlin" },
   { src: "/logos/swift.svg", label: "Swift" },
-  { src: "/logos/d3dotjs.svg", label: "D3.js" },
-  { src: "/logos/postgresql.svg", label: "PostgreSQL" },
 ];
