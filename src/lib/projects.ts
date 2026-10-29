@@ -30,7 +30,7 @@ export const projects: Project[] = [
     description:
       "A voice assistant that lives on your Mac and sends a legion of AI units to do the work. Local voice, Claude units, asks before anything risky.",
     topics: ["Swift", "Python", "MLX", "Claude Code"],
-    pushed_at: "",
+    pushed_at: "2026-10-25",
   },
   {
     name: "Rabbithole",
@@ -39,7 +39,7 @@ export const projects: Project[] = [
       "A graph explorer for deep dives. Type a topic and it lays out where to go next as cards, one column per level of depth. Open, add or dismiss nodes, and each one you open gets a short research note. Free on Wikipedia, or plug in Anthropic, OpenAI, Gemini, OpenRouter, Ollama or LM Studio.",
     keepDescription: true,
     topics: ["TypeScript", "Electron", "Local + hosted AI"],
-    pushed_at: "",
+    pushed_at: "2026-10-19",
   },
   {
     name: "Levels",
@@ -47,7 +47,7 @@ export const projects: Project[] = [
     description:
       "Claude Code skills that rate parts of a project on a 1 to 5 scale, propose options, and hand the chosen work to cheaper models behind a confirmation gate.",
     topics: ["Claude Code", "Agent skills", "Plugin"],
-    pushed_at: "",
+    pushed_at: "2026-10-14",
   },
   {
     name: "Zetavote",
@@ -55,6 +55,6 @@ export const projects: Project[] = [
     description:
       "Local-first voting with cryptographic voter authentication, encrypted ballots, tamper-evident audits and receipt-based verification. Runs on-device.",
     topics: ["TypeScript", "SQLite", "FastAPI", "Local-first"],
-    pushed_at: "2026-09-29",
+    pushed_at: "2026-10-24",
   },
 ];
