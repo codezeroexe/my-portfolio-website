@@ -5,7 +5,7 @@ import type { SectionPlacements } from "@/lib/placements";
 // short margin notes, not a second description
 const NOTES: Record<string, string> = {
   ultron: "J.A.R.V.I.S., but on a Mac",
-  rabbithole: "free on Wikipedia, no key",
+  rabbithole: "API keys stay in the system keychain",
   levels: "nothing builds until you say so",
   zetavote: "runs on a laptop, on a plane",
 };

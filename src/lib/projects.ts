@@ -8,6 +8,8 @@ export type Project = {
   /** the GitHub slug — this is what the live fetch matches on */
   repo: string;
   description: string;
+  /** true keeps the text here instead of the shorter GitHub About line */
+  keepDescription?: boolean;
   topics: string[];
   /** empty when unknown: the stamp is left off until the live fetch fills it */
   pushed_at: string;
@@ -33,7 +35,9 @@ export const projects: Project[] = [
   {
     name: "Rabbithole",
     repo: "rabbithole",
-    description: "Graph explorer for deep dives, with pluggable AI backends.",
+    description:
+      "A graph explorer for deep dives. Type a topic and it lays out where to go next as cards, one column per level of depth. Open, add or dismiss nodes, and each one you open gets a short research note. Free on Wikipedia, or plug in Anthropic, OpenAI, Gemini, OpenRouter, Ollama or LM Studio.",
+    keepDescription: true,
     topics: ["TypeScript", "Electron", "Local + hosted AI"],
     pushed_at: "",
   },
